@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <style>
+        body { 
+            text-align: center; 
+            font-family: 'Minecraft', sans-serif; 
+            background: url('fondo.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white; 
+            margin: 0;
+            padding: 0;
+        }
+        h1 { margin-top: 20px; }
+        .container { margin-top: 50px; }
+        button { 
+            padding: 15px 40px; 
+            margin: 15px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            border: 3px solid #550000; 
+            border-radius: 8px; 
+            font-family: 'Minecraft', sans-serif;
+            color: white;
+            background: linear-gradient(to bottom, #ff5555, #aa0000);
+            box-shadow: 0px 4px 0px #550000;
+            transition: 0.2s ease-in-out;
+        }
+        button:hover { 
+            background: linear-gradient(to bottom, #ff7777, #cc0000); 
+            transform: scale(1.05);
+        }
+        button:active {
+            box-shadow: none;
+            transform: translateY(3px);
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="title.png" alt="Edtra pagine" width="300"></h1>
+    <div class="container">
+        <button onclick="location.href='sociales.html'">social network</button>
+        <button onclick="location.href='addons.html'">Addons</button>
+    </div>
+</body>
+</html>
