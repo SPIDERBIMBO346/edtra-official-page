@@ -1,0 +1,51 @@
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Edtra Maker</title>
+      <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+      <style>
+          body { 
+              text-align: center; 
+              font-family: 'Minecraft', sans-serif; 
+              background: url('fondo.png') no-repeat center center fixed;
+              background-size: cover;
+              color: white; 
+              margin: 0;
+              padding: 0;
+          }
+          h1 { margin-top: 20px; }
+          .container { margin-top: 50px; }
+  
+          /* Botones en tonos morados */
+          button { 
+              padding: 15px 40px; 
+              margin: 15px; 
+              font-size: 20px; 
+              cursor: pointer; 
+              border: 3px solid #3D0066; 
+              border-radius: 8px; 
+              font-family: 'Minecraft', sans-serif;
+              color: white;
+              background: linear-gradient(to bottom, #A855F7, #6B21A8);
+              box-shadow: 0px 4px 0px #3D0066;
+              transition: 0.2s ease-in-out;
+          }
+          button:hover { 
+              background: linear-gradient(to bottom, #C084FC, #7E22CE); 
+              transform: scale(1.05);
+          }
+          button:active {
+              box-shadow: none;
+              transform: translateY(3px);
+          }
+      </style>
+  </head>
+  <body>
+      <h1><img src="edtra_maker.png" alt="Edtra Maker" width="300"></h1>
+      <div class="container">
+          <button onclick="location.href='sound.html'">Create Sounds</button>
+      </div>
+  </body>
+  </html>
