@@ -48,11 +48,78 @@
             font-size: 16px;
         }
         button:hover {
-            background: linear-gradient(to bottom, #66cc66, #338833");
+            background: linear-gradient(to bottom, #66cc66, #338833);
+        }
+        /* Botón de Instrucciones */
+        #instructions-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(to bottom, #5555aa, #222288);
+            border: 3px solid #111166;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        #instructions-btn:hover {
+            background: linear-gradient(to bottom, #6666cc, #333399);
+        }
+        /* Menú de Instrucciones */
+        #instructions {
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            transform: translate(-0%, -0%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            width: 80%;
+            max-width: 400px;
+        }
+        #instructions p {
+            margin: 10px 0;
+        }
+        #close-instructions {
+            background: red;
+            border: 2px solid darkred;
+            padding: 5px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+    <button id="instructions-btn" onclick="toggleInstructions()">📖 Instrucciones</button>
+    
+    <div id="instructions">
+        <h2>📖 Instrucciones</h2>
+        <p><b>Ejecutar sonido en Minecraft:</b></p>
+        <p>Nombre: <code>Carpeta.ce</code></p>
+        <p>En Minecraft: <code>/playsound Carpeta.ce @s</code></p>
+        
+        <p><b>Ubicación del archivo .ogg:</b></p>
+        <p>Debe estar en: <code>sounds/(nombre cualquiera)/sonido.ogg</code></p>
+        <p>⚠️ Obligatorio que inicie con <code>sounds/</code> y termine en <code>.ogg</code></p>
+
+        <p><b>Exportar:</b></p>
+        <p>El sonido debe estar en formato <code>.ogg</code> antes de exportarlo.</p>
+
+        <hr>
+        <h2>📖 English Instructions</h2>
+        <p><b>How to run the sound in Minecraft:</b></p>
+        <p>Name: <code>Folder.ce</code></p>
+        <p>In Minecraft: <code>/playsound Folder.ce @s</code></p>
+
+        <p><b>Where to put the .ogg file:</b></p>
+        <p>It must be in: <code>sounds/(any name)/sound.ogg</code></p>
+        <p>⚠️ Mandatory that it starts with <code>sounds/</code> and ends with <code>.ogg</code></p>
+
+        <p><b>Export:</b></p>
+        <p>The sound must be converted to <code>.ogg</code> before exporting.</p>
+
+        <button id="close-instructions" onclick="toggleInstructions()">Cerrar</button>
+    </div>
+
     <h1>Custom Playsound</h1>
     <div class="container">
         <div id="soundList"></div>
@@ -62,6 +129,11 @@
 
     <script>
         let sounds = [];
+
+        function toggleInstructions() {
+            let menu = document.getElementById("instructions");
+            menu.style.display = menu.style.display === "none" ? "block" : "none";
+        }
 
         function addSound() {
             let container = document.getElementById("soundList");
