@@ -1,233 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sound.json</title>
-    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <style>
-        body {
-            text-align: center;
-            font-family: 'Minecraft', sans-serif;
-            background: url('fondo.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 24px;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 10px;
-        }
-        .sound-entry {
-            margin-bottom: 10px;
-        }
-        input {
-            font-family: 'Minecraft', sans-serif;
-            padding: 5px;
-            width: 200px;
-            text-align: center;
-            background: #222;
-            border: 2px solid #555;
-            color: white;
-        }
-        button {
-            font-family: 'Minecraft', sans-serif;
-            background: linear-gradient(to bottom, #55aa55, #226622);
-            border: 3px solid #113311;
-            padding: 10px;
-            cursor: pointer;
-            color: white;
-            font-size: 16px;
-        }
-        button:hover {
-            background: linear-gradient(to bottom, #66cc66, #338833);
-        }
-        /* Botón de Instrucciones */
-        #instructions-btn {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: linear-gradient(to bottom, #5555aa, #222288);
-            border: 3px solid #111166;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-        #instructions-btn:hover {
-            background: linear-gradient(to bottom, #6666cc, #333399);
-        }
-        /* Menú de Instrucciones */
-        #instructions {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: left;
-            width: 80%;
-            max-width: 300px;
-            font-size: 14px;
-            overflow-y: auto;
-            max-height: 400px;
-        }
-        #instructions p {
-            margin: 10px 0;
-        }
-        #close-instructions {
-            background: red;
-            border: 2px solid darkred;
-            padding: 5px;
-            font-size: 14px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>sound.json Generator</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    body {
+      font-family: 'Minecraft', sans-serif;
+      background: url('fondo.png') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+    }
+
+    .sound-entry {
+      margin-bottom: 10px;
+    }
+
+    input {
+      font-family: 'Minecraft', sans-serif;
+      padding: 5px;
+      width: 200px;
+      text-align: center;
+      background: #222;
+      border: 2px solid #555;
+      color: white;
+    }
+
+    button {
+      font-family: 'Minecraft', sans-serif;
+      background: linear-gradient(to bottom, #55aa55, #226622);
+      border: 3px solid #113311;
+      padding: 10px;
+      cursor: pointer;
+      color: white;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: linear-gradient(to bottom, #66cc66, #338833);
+    }
+
+    #instructions-btn {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: linear-gradient(to bottom, #5555aa, #222288);
+      border: 3px solid #111166;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    #instructions-btn:hover {
+      background: linear-gradient(to bottom, #6666cc, #333399);
+    }
+
+    #instructions {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      width: 80%;
+      max-width: 300px;
+      font-size: 14px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+
+    #instructions p {
+      margin: 10px 0;
+    }
+
+    #close-instructions {
+      background: red;
+      border: 2px solid darkred;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-    <button id="instructions-btn" onclick="toggleInstructions()">📖 Instrucciones</button>
-    
-    <div id="instructions">
-        <h2>📖 Instrucciones</h2>
-        <p><b>Ejecutar sonido en Minecraft:</b></p>
-        <p>Nombre: <code>Carpeta.ce</code></p>
-        <p>En Minecraft: <code>/playsound Carpeta.ce @s</code></p>
-        
-        <p><b>Ubicación del archivo .ogg:</b></p>
-        <p>Debe estar en: <code>sounds/(nombre cualquiera)/sonido.ogg</code></p>
-        <p>⚠️ Obligatorio que inicie con <code>sounds/</code> y termine en <code>.ogg</code></p>
+  <button id="instructions-btn" onclick="toggleInstructions()">📖 Instrucciones</button>
+  <div id="instructions">
+    <h2>📖 Instrucciones</h2>
+    <p><b>Ejecutar sonido en Minecraft:</b></p>
+    <p>Nombre: <code>mi_sonido</code></p>
+    <p>En Minecraft: <code>/playsound mi_sonido @s</code></p>
 
-        <p><b>Exportar:</b></p>
-        <p>El sonido debe estar en formato <code>.ogg</code> antes de exportarlo.</p>
+    <p><b>Ruta del archivo .ogg:</b></p>
+    <p>Puede ser cualquiera pero debe terminar en <code>.ogg</code></p>
+    <p>Ejemplo: <code>carpeta/sonido.ogg</code></p>
 
-        <hr>
-        <h2>📖 English Instructions</h2>
-        <p><b>How to run the sound in Minecraft:</b></p>
-        <p>Name: <code>Folder.ce</code></p>
-        <p>In Minecraft: <code>/playsound Folder.ce @s</code></p>
+    <p><b>Exportar:</b></p>
+    <p>El sonido debe estar en formato <code>.ogg</code> antes de exportarlo.</p>
 
-        <p><b>Where to put the .ogg file:</b></p>
-        <p>It must be in: <code>sounds/(any name)/sound.ogg</code></p>
-        <p>⚠️ Mandatory that it starts with <code>sounds/</code> and ends with <code>.ogg</code></p>
+    <button id="close-instructions" onclick="toggleInstructions()">Cerrar</button>
+  </div>
 
-        <p><b>Export:</b></p>
-        <p>The sound must be converted to <code>.ogg</code> before exporting.</p>
+  <h1>Custom Playsound</h1>
+  <div class="container">
+    <div id="soundList"></div>
+    <button onclick="addSound()">Agregar Sonido</button>
+    <button onclick="exportZip()">Exportar archivo</button>
+  </div>
 
-        <button id="close-instructions" onclick="toggleInstructions()">Cerrar</button>
-    </div>
+  <script>
+    let sounds = [];
 
-    <h1>Custom Playsound</h1>
-    <div class="container">
-        <div id="soundList"></div>
-        <button onclick="addSound()">Agregar Sonido</button>
-        <button onclick="exportZip()">Exportar archivo</button>
-    </div>
+    function toggleInstructions() {
+      let menu = document.getElementById("instructions");
+      menu.style.display = menu.style.display === "none" ? "block" : "none";
+    }
 
-    <script>
-        let sounds = [];
+    function addSound() {
+      let container = document.getElementById("soundList");
+      let index = sounds.length;
 
-        function toggleInstructions() {
-            let menu = document.getElementById("instructions");
-            menu.style.display = menu.style.display === "none" ? "block" : "none";
+      let div = document.createElement("div");
+      div.className = "sound-entry";
+      div.innerHTML = `
+        <input type="text" placeholder="Nombre (ej: edtra_sonido)" id="name${index}">
+        <input type="text" placeholder="Ruta (ej: carpeta/sonido.ogg)" id="path${index}">
+        <input type="file" id="file${index}" accept="audio/ogg">
+        <button onclick="removeSound(${index})">❌️</button>
+      `;
+      container.appendChild(div);
+
+      sounds.push({ name: `name${index}`, path: `path${index}`, file: `file${index}` });
+    }
+
+    function removeSound(index) {
+      sounds.splice(index, 1);
+      document.getElementById("soundList").children[index].remove();
+    }
+
+    async function exportZip() {
+      let json = {};
+      let zip = new JSZip();
+      let soundFolder = zip.folder("sounds");
+      let filePromises = [];
+
+      for (let i = 0; i < sounds.length; i++) {
+        let name = document.getElementById(`name${i}`).value.trim();
+        let path = document.getElementById(`path${i}`).value.trim();
+        let fileInput = document.getElementById(`file${i}`);
+        let file = fileInput.files[0];
+
+        if (name === "" || path === "" || !file) {
+          alert("El nombre no puede estar vacío y se debe subir un archivo .ogg.");
+          return;
         }
 
-        function addSound() {
-            let container = document.getElementById("soundList");
-            let index = sounds.length;
-
-            let div = document.createElement("div");
-            div.className = "sound-entry";
-            div.innerHTML = `
-                <input type="text" placeholder="Nombre (ej: edtra.sonido)" id="name${index}">
-                <input type="text" placeholder="Ruta (ej: sounds/carpeta/sonido.ogg)" id="path${index}">
-                <input type="file" id="file${index}" accept="audio/ogg">
-                <button onclick="removeSound(${index})">❌</button>
-            `;
-            container.appendChild(div);
-
-            sounds.push({ name: `name${index}`, path: `path${index}`, file: `file${index}` });
+        if (!path.endsWith(".ogg")) {
+          alert("La ruta debe terminar en '.ogg'.");
+          return;
         }
 
-        function removeSound(index) {
-            sounds.splice(index, 1);
-            document.getElementById("soundList").children[index].remove();
-        }
+        json[name] = {
+          "category": "music",
+          "sounds": [path.replace(".ogg", "")]
+        };
 
-        async function exportZip() {
-            let json = {};
-            let zip = new JSZip();
-            let soundFolder = zip.folder("sounds");
-            let filePromises = [];
+        let reader = new FileReader();
+        let promise = new Promise((resolve) => {
+          reader.onload = function (e) {
+            soundFolder.file(path, e.target.result);
+            resolve();
+          };
+          reader.readAsArrayBuffer(file);
+        });
 
-            for (let i = 0; i < sounds.length; i++) {
-                let name = document.getElementById(`name${i}`).value.trim();
-                let path = document.getElementById(`path${i}`).value.trim();
-                let fileInput = document.getElementById(`file${i}`);
-                let file = fileInput.files[0];
+        filePromises.push(promise);
+      }
 
-                if (!name.includes(".") || name === "" || path === "" || !file) {
-                    alert("El nombre debe tener formato 'carpeta.sonido', no estar vacío y se debe subir un archivo .ogg.");
-                    return;
-                }
+      await Promise.all(filePromises);
 
-                if (!path.startsWith("sounds/") || !path.endsWith(".ogg")) {
-                    alert("La ruta debe comenzar con 'sounds/' y terminar en '.ogg'.");
-                    return;
-                }
+      let soundJson = JSON.stringify(json, null, 4);
+      let manifest = {
+        "format_version": 2,
+        "header": {
+          "name": "Sound Pack",
+          "description": "Paquete de sonidos by edtra club",
+          "uuid": crypto.randomUUID(),
+          "version": [1, 0, 0],
+          "min_engine_version": [1, 19, 0]
+        },
+        "modules": [{
+          "type": "resources",
+          "uuid": crypto.randomUUID(),
+          "version": [1, 0, 0]
+        }]
+      };
 
-                json[name] = {
-                    "category": "music",
-                    "sounds": [path.replace(".ogg", "")]
-                };
+      zip.folder("sounds").file("sound_definitions.json", soundJson);
+      zip.file("manifest.json", JSON.stringify(manifest, null, 4));
 
-                let reader = new FileReader();
-                let promise = new Promise((resolve) => {
-                    reader.onload = function (e) {
-                        soundFolder.file(path.replace("sounds/", ""), e.target.result);
-                        resolve();
-                    };
-                    reader.readAsArrayBuffer(file);
-                });
-
-                filePromises.push(promise);
-            }
-
-            await Promise.all(filePromises);
-
-            let soundJson = JSON.stringify(json, null, 4);
-            let manifest = {
-                "format_version": 2,
-                "header": {
-                    "name": "Sound Pack",
-                    "description": "Paquete de sonidos generado",
-                    "uuid": crypto.randomUUID(),
-                    "version": [1, 0, 0],
-                    "min_engine_version": [1, 19, 0]
-                },
-                "modules": [{
-                    "type": "resources",
-                    "uuid": crypto.randomUUID(),
-                    "version": [1, 0, 0]
-                }]
-            };
-
-            zip.folder("sounds").file("sound_definitions.json", soundJson);
-            zip.file("manifest.json", JSON.stringify(manifest, null, 4));
-
-            zip.generateAsync({ type: "blob" }).then(function(content) {
-                let a = document.createElement("a");
-                a.href = URL.createObjectURL(content);
-                a.download = "sound_custom.mcpack.zip";
-                a.click();
-            });
-        }
-    </script>
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        let a = document.createElement("a");
+        a.href = URL.createObjectURL(content);
+        a.download = "sound_custom.mcpack.zip";
+        a.click();
+      });
+    }
+  </script>
 </body>
 </html>
