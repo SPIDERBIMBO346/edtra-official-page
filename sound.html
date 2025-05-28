@@ -7,7 +7,6 @@
   <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
-    /* Tus estilos, igual que antes */
     body {
       font-family: 'Minecraft', sans-serif;
       background: url('fondo.png') no-repeat center center fixed;
@@ -37,27 +36,23 @@
     }
     button {
       font-family: 'Minecraft', sans-serif;
-      background: linear-gradient(to bottom, #55aa55, #226622);
-      border: 3px solid #113311;
-      padding: 10px;
-      cursor: pointer;
-      color: white;
+      padding: 10px 20px;
+      margin: 5px;
       font-size: 16px;
+      cursor: pointer;
+      border: 3px solid #3D0066;
+      border-radius: 8px;
+      background: linear-gradient(to bottom, #8000ff, #4b0082);
+      color: white;
     }
     button:hover {
-      background: linear-gradient(to bottom, #66cc66, #338833);
+      background: linear-gradient(to bottom, #9933ff, #5d00b3);
     }
     #instructions-btn {
       position: fixed;
       bottom: 10px;
       right: 10px;
-      background: linear-gradient(to bottom, #5555aa, #222288);
-      border: 3px solid #111166;
-      padding: 5px 10px;
       font-size: 14px;
-    }
-    #instructions-btn:hover {
-      background: linear-gradient(to bottom, #6666cc, #333399);
     }
     #instructions {
       display: none;
@@ -76,12 +71,6 @@
       max-height: 400px;
     }
     #instructions p { margin: 10px 0; }
-    #close-instructions {
-      background: red;
-      border: 2px solid darkred;
-      padding: 5px;
-      font-size: 14px;
-    }
   </style>
 </head>
 <body>
@@ -93,50 +82,76 @@
     <p>En Minecraft: <code>/playsound mi_sonido @s</code></p>
 
     <p><b>Ruta del archivo .ogg:</b></p>
-    <p>Puede ser cualquiera pero debe terminar en <code>.ogg</code></p>
-    <p>Ejemplo: <code>sounds/carpeta/sonido.ogg</code></p>
+    <p>Debe terminar en <code>.ogg</code>. Ejemplo: <code>carpeta/sonido.ogg</code></p>
 
     <p><b>Exportar:</b></p>
-    <p>El sonido debe estar en formato <code>.ogg</code> antes de exportarlo.</p>
+    <p>Puedes cambiar el nombre del addon antes de exportarlo. Tu progreso se guarda hasta que reinicies o edites algo.</p>
 
-    <button id="close-instructions" onclick="toggleInstructions()">Cerrar</button>
+    <button onclick="toggleInstructions()">Cerrar</button>
   </div>
 
   <h1>Custom Playsound</h1>
   <div class="container">
+    <input id="packName" placeholder="Nombre del Addon (ej: edtra_sonidos)">
     <div id="soundList"></div>
-    <button onclick="addSound()">Agregar Sonido</button>
-    <button onclick="exportZip()">Exportar archivo</button>
+    <button onclick="addSound()">➕ Agregar Sonido</button>
+    <button onclick="exportZip()">📦 Exportar archivo</button>
   </div>
 
   <script>
-    let sounds = [];
+    let sounds = JSON.parse(localStorage.getItem("soundList")) || [];
 
     function toggleInstructions() {
       let menu = document.getElementById("instructions");
       menu.style.display = menu.style.display === "none" ? "block" : "none";
     }
 
+    function saveToLocalStorage() {
+      localStorage.setItem("soundList", JSON.stringify(sounds));
+    }
+
     function addSound() {
       let container = document.getElementById("soundList");
       let index = sounds.length;
+      sounds.push({ name: "", path: "" });
+      saveToLocalStorage();
 
       let div = document.createElement("div");
       div.className = "sound-entry";
       div.innerHTML = `
-        <input type="text" placeholder="Nombre (ej: edtra_sonido)" id="name${index}">
-        <input type="text" placeholder="Ruta (ej: carpeta/sonido.ogg)" id="path${index}">
+        <input type="text" placeholder="Nombre" id="name${index}" oninput="updateSound(${index})">
+        <input type="text" placeholder="Ruta .ogg" id="path${index}" oninput="updateSound(${index})">
         <input type="file" id="file${index}" accept="audio/ogg">
-        <button onclick="removeSound(${index})">❌️</button>
+        <button onclick="removeSound(${index})">❌</button>
       `;
       container.appendChild(div);
-
-      sounds.push({ name: `name${index}`, path: `path${index}`, file: `file${index}` });
     }
 
     function removeSound(index) {
       sounds.splice(index, 1);
-      document.getElementById("soundList").children[index].remove();
+      saveToLocalStorage();
+      location.reload(); // recargar para reordenar índices y entradas
+    }
+
+    function updateSound(index) {
+      sounds[index].name = document.getElementById(`name${index}`).value;
+      sounds[index].path = document.getElementById(`path${index}`).value;
+      saveToLocalStorage();
+    }
+
+    function loadSavedSounds() {
+      let container = document.getElementById("soundList");
+      sounds.forEach((s, i) => {
+        let div = document.createElement("div");
+        div.className = "sound-entry";
+        div.innerHTML = `
+          <input type="text" value="${s.name}" placeholder="Nombre" id="name${i}" oninput="updateSound(${i})">
+          <input type="text" value="${s.path}" placeholder="Ruta .ogg" id="path${i}" oninput="updateSound(${i})">
+          <input type="file" id="file${i}" accept="audio/ogg">
+          <button onclick="removeSound(${i})">❌</button>
+        `;
+        container.appendChild(div);
+      });
     }
 
     async function exportZip() {
@@ -151,8 +166,8 @@
         let fileInput = document.getElementById(`file${i}`);
         let file = fileInput.files[0];
 
-        if (name === "" || path === "" || !file) {
-          alert("El nombre no puede estar vacío y se debe subir un archivo .ogg.");
+        if (!name || !path || !file) {
+          alert("Completa todos los campos y sube el archivo .ogg.");
           return;
         }
 
@@ -161,10 +176,11 @@
           return;
         }
 
-       json[name] = {
-  "category": "music",
-  "sounds": ["sounds/" + path.replace(".ogg", "")]
-};  
+        json[name] = {
+          category: "music",
+          sounds: ["sounds/" + path.replace(".ogg", "")]
+        };
+
         let reader = new FileReader();
         let promise = new Promise((resolve) => {
           reader.onload = function (e) {
@@ -180,41 +196,43 @@
       await Promise.all(filePromises);
 
       let soundJson = JSON.stringify(json, null, 4);
+      let addonName = document.getElementById("packName").value || "Sound Pack";
       let manifest = {
-        "format_version": 2,
-        "header": {
-          "name": "Sound Pack",
-          "description": "Paquete de sonidos by edtra club",
-          "uuid": crypto.randomUUID(),
-          "version": [1, 0, 0],
-          "min_engine_version": [1, 19, 0]
+        format_version: 2,
+        header: {
+          name: addonName,
+          description: "Paquete de sonidos personalizado",
+          uuid: crypto.randomUUID(),
+          version: [1, 0, 0],
+          min_engine_version: [1, 19, 0]
         },
-        "modules": [{
-          "type": "resources",
-          "uuid": crypto.randomUUID(),
-          "version": [1, 0, 0]
+        modules: [{
+          type: "resources",
+          uuid: crypto.randomUUID(),
+          version: [1, 0, 0]
         }]
       };
 
       zip.folder("sounds").file("sound_definitions.json", soundJson);
       zip.file("manifest.json", JSON.stringify(manifest, null, 4));
 
-      // Copiar al portapapeles el JSON
       try {
         await navigator.clipboard.writeText(soundJson);
         alert("¡sound_definitions.json copiado al portapapeles!");
       } catch (err) {
-        console.error("Error al copiar el JSON:", err);
-        alert("No se pudo copiar el JSON al portapapeles.");
+        alert("No se pudo copiar el JSON.");
       }
 
-      zip.generateAsync({ type: "blob" }).then(function(content) {
+      zip.generateAsync({ type: "blob" }).then(content => {
         let a = document.createElement("a");
         a.href = URL.createObjectURL(content);
-        a.download = "sound_custom.mcpack.zip";
+        a.download = `${addonName.replace(/\s+/g, "_").toLowerCase()}.mcpack.zip`;
         a.click();
       });
     }
+
+    // Cargar sonidos guardados al iniciar
+    window.onload = loadSavedSounds;
   </script>
 </body>
 </html>
