@@ -40,13 +40,13 @@
       margin: 5px;
       font-size: 16px;
       cursor: pointer;
-      border: 3px solid #006633;
+      border: 3px solid #005f00;
       border-radius: 8px;
-      background: linear-gradient(to bottom, #00cc66, #006633);
+      background: linear-gradient(to bottom, #00cc00, #006600);
       color: white;
     }
     button:hover {
-      background: linear-gradient(to bottom, #33ff99, #00994d);
+      background: linear-gradient(to bottom, #33ff33, #009900);
     }
     #instructions-btn {
       position: fixed;
@@ -90,7 +90,11 @@
     <button onclick="toggleInstructions()">Cerrar</button>
   </div>
 
-  <h1>Custom Playsound</h1>
+  <h1>
+    <img src="sonido.png" alt="icono sonido" style="width:32px;height:32px;vertical-align:middle;margin-right:10px;">
+    Custom Playsound
+  </h1>
+
   <div class="container">
     <input id="packName" placeholder="Nombre del Addon (ej: edtra_sonidos)">
     <div id="soundList"></div>
