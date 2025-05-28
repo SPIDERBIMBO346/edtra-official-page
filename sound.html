@@ -16,12 +16,7 @@
       margin: 0;
       padding: 20px;
     }
-
-    .title-image {
-      width: 300px;
-      margin-bottom: 10px;
-    }
-
+    h1 { font-size: 24px; }
     .container {
       width: 80%;
       margin: auto;
@@ -29,9 +24,7 @@
       background: rgba(0, 0, 0, 0.8);
       border-radius: 10px;
     }
-
     .sound-entry { margin-bottom: 10px; }
-
     input {
       font-family: 'Minecraft', sans-serif;
       padding: 5px;
@@ -41,30 +34,26 @@
       border: 2px solid #555;
       color: white;
     }
-
     button {
       font-family: 'Minecraft', sans-serif;
       padding: 10px 20px;
       margin: 5px;
       font-size: 16px;
       cursor: pointer;
-      border: 3px solid #267326;
+      border: 3px solid #006633;
       border-radius: 8px;
-      background: linear-gradient(to bottom, #90ee90, #66cc66);
-      color: black;
+      background: linear-gradient(to bottom, #00cc66, #006633);
+      color: white;
     }
-
     button:hover {
-      background: linear-gradient(to bottom, #76dd76, #55aa55);
+      background: linear-gradient(to bottom, #33ff99, #00994d);
     }
-
     #instructions-btn {
       position: fixed;
       bottom: 10px;
       right: 10px;
       font-size: 14px;
     }
-
     #instructions {
       display: none;
       position: fixed;
@@ -81,7 +70,6 @@
       overflow-y: auto;
       max-height: 400px;
     }
-
     #instructions p { margin: 10px 0; }
   </style>
 </head>
@@ -102,13 +90,12 @@
     <button onclick="toggleInstructions()">Cerrar</button>
   </div>
 
-  <img src="sonido.png" alt="Título: Custom Playsound" class="title-image">
-
+  <h1>Custom Playsound</h1>
   <div class="container">
     <input id="packName" placeholder="Nombre del Addon (ej: edtra_sonidos)">
     <div id="soundList"></div>
-    <button onclick="addSound()"> Agregar Sonido</button>
-    <button onclick="exportZip()"> Exportar archivo</button>
+    <button onclick="addSound()">➕ Agregar Sonido</button>
+    <button onclick="exportZip()">📦 Exportar archivo</button>
   </div>
 
   <script>
@@ -143,7 +130,7 @@
     function removeSound(index) {
       sounds.splice(index, 1);
       saveToLocalStorage();
-      location.reload();
+      location.reload(); // recargar para reordenar índices y entradas
     }
 
     function updateSound(index) {
@@ -244,6 +231,7 @@
       });
     }
 
+    // Cargar sonidos guardados al iniciar
     window.onload = loadSavedSounds;
   </script>
 </body>
