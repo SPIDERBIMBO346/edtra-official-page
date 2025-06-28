@@ -1,60 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Addons</title>
-    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-    <style>
-        body { 
-            text-align: center; 
-            font-family: 'Minecraft', sans-serif; 
-            background: url('fondo.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white; 
-            margin: 0;
-            padding: 0;
-        }
-        h1 { margin-top: 20px; }
-        .container { margin-top: 50px; }
-        a { 
-            display: block; 
-            margin: 15px auto; 
-            padding: 15px 40px; 
-            font-size: 20px; 
-            width: 300px; 
-            text-decoration: none; 
-            font-family: 'Minecraft', sans-serif;
-            color: white; 
-            border: 3px solid #774400; 
-            border-radius: 8px; 
-            background: linear-gradient(to bottom, #ffaa00, #cc5500);
-            box-shadow: 0px 4px 0px #774400;
-            transition: 0.2s ease-in-out;
-        }
-        a:hover { 
-            background: linear-gradient(to bottom, #ffcc44, #dd6600); 
-            transform: scale(1.05);
-        }
-        a:active {
-            box-shadow: none;
-            transform: translateY(3px);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Addons</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Minecraft', sans-serif;
+      background: url('fondo.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .addon-block {
+      margin-bottom: 40px;
+    }
+
+    a {
+      display: block;
+      margin: auto;
+      padding: 0;
+      width: 300px;
+      text-decoration: none;
+      font-family: 'Minecraft', sans-serif;
+      color: white;
+      border: 3px solid #774400;
+      border-radius: 8px;
+      background: linear-gradient(to bottom, #ffaa00, #cc5500);
+      box-shadow: 0px 4px 0px #774400;
+      transition: 0.2s ease-in-out;
+      overflow: hidden;
+    }
+
+    a:hover {
+      background: linear-gradient(to bottom, #ffcc44, #dd6600);
+      transform: scale(1.05);
+    }
+
+    a:active {
+      box-shadow: none;
+      transform: translateY(3px);
+    }
+
+    .addon-banner {
+      width: 100%;
+      display: block;
+    }
+
+    .addon-label {
+      padding: 15px 0;
+      font-size: 20px;
+    }
+
+    /* Botón hamburguesa */
+    .menu-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    .menu-toggle div {
+      width: 30px;
+      height: 4px;
+      background-color: white;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .menu a {
+      display: block;
+      margin: 8px 0;
+      width: auto;
+      padding: 8px 12px;
+      font-size: 16px;
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .menu a:hover {
+      background: #444;
+    }
+  </style>
 </head>
 <body>
-    <h1><img src="addons.png" alt="Addons" width="300"></h1>
-    <div class="container">
-<a href="https://www.curseforge.com/minecraft-bedrock/addons/three-lives-hardcore" target="_blank">❤ Three lives Hardcore</a>
 
-        <a href="https://www.mediafire.com/file/8tkn9gx7b90eipg/CUSTOM%2527S_MISSION%2527S_V2_.mcaddon/file" target="_blank">📜 Customs Missions v2</a>
-        
-        <a href="https://mcpedl.com/the-cursed-apple/" target="_blank"> 👁 The cursed  apple</a>
-                <a href="https://mcpedl.com/edtra-timer-v1/" target="_blank">🕑 Edtra timer v1</a>
-                  <a href="https://mcpedl.com/tnt-tag/" target="_blank">🧨 Tnt Tag</a>
-                    <a href="https://www.mediafire.com/file/11b69ahteovjhzp/Chat_blocker_v1.0.1.mcaddon/file" target="_blank">🔒 Chat Blocker v1.0.1</a>
-<a href="https://www.mediafire.com/file/icgkmeu47rhnirj/Death_Locate.mcaddon.zip/file" target="_blank">💀 Death Locate</a>
-<a href="https://www.mediafire.com/file/l2merl05zwr8vly/Difficulty.mcaddon/file" target="_blank">🩹 Difficulty</a>
+  <!-- Botón Hamburguesa -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Menú de Navegación -->
+  <div class="menu" id="menu">
+    <a href="index.html"> Volver al Inicio</a>
+    <a href="edtra_maker.html">️ Edtra Maker</a>
+  </div>
+
+  <h1><img src="addons.png" alt="Addons" width="300"></h1>
+  <div class="container">
+
+    <div class="addon-block">
+      <a href="https://www.curseforge.com/minecraft-bedrock/addons/three-lives-hardcore" target="_blank">
+        <img src="hardcore.png" class="addon-banner" alt="Hardcore">
+        <div class="addon-label">❤ Three lives Hardcore</div>
+      </a>
     </div>
+
+    <div class="addon-block">
+      <a href="https://www.mediafire.com/file/8tkn9gx7b90eipg/CUSTOM%2527S_MISSION%2527S_V2_.mcaddon/file" target="_blank">
+        <img src="missions.png" class="addon-banner" alt="Missions">
+        <div class="addon-label">📜 Customs Missions v2</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://mcpedl.com/the-cursed-apple/" target="_blank">
+        <img src="apple.png" class="addon-banner" alt="Cursed Apple">
+        <div class="addon-label">👁 The cursed apple</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://mcpedl.com/edtra-timer-v1/" target="_blank">
+        <img src="timer.png" class="addon-banner" alt="Timer">
+        <div class="addon-label">🕑 Edtra timer v1</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://mcpedl.com/tnt-tag/" target="_blank">
+        <img src="tnt.png" class="addon-banner" alt="TNT Tag">
+        <div class="addon-label">🧨 Tnt Tag</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://www.mediafire.com/file/11b69ahteovjhzp/Chat_blocker_v1.0.1.mcaddon/file" target="_blank">
+        <img src="chatblock.png" class="addon-banner" alt="Chat Blocker">
+        <div class="addon-label">🔒 Chat Blocker v1.0.1</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://www.mediafire.com/file/icgkmeu47rhnirj/Death_Locate.mcaddon.zip/file" target="_blank">
+        <img src="deathlocate.png" class="addon-banner" alt="Death Locate">
+        <div class="addon-label">💀 Death Locate</div>
+      </a>
+    </div>
+
+    <div class="addon-block">
+      <a href="https://www.mediafire.com/file/l2merl05zwr8vly/Difficulty.mcaddon/file" target="_blank">
+        <img src="difficulty.png" class="addon-banner" alt="Difficulty">
+        <div class="addon-label">🩹 Difficulty</div>
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
