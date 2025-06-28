@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
-    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <linkb href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     <style>
         body { 
             text-align: center; 
@@ -41,65 +41,50 @@
             transform: translateY(3px);
         }
 
-        /* ESTILOS DEL BOTÓN PENTÁGONO (Menú Toggle) */
-        .menu-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(to bottom, #ff5555, #aa0000);
-            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            border: 3px solid #550000;
-            box-shadow: 0px 4px 0px #550000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s ease-in-out;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-            font-family: 'Minecraft', sans-serif;
-        }
-        .menu-toggle:hover {
-            background: linear-gradient(to bottom, #ff7777, #cc0000);
-            transform: scale(1.05);
-        }
-        .menu-toggle:active {
-            box-shadow: none;
-            transform: translateY(3px);
-        }
+  .menu-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px;
+      border-radius: 6px;
+    }
 
-        /* ESTILOS DEL MENÚ */
-        .menu {
-            position: absolute;
-            top: 70px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid white;
-            border-radius: 10px;
-            display: none;
-            flex-direction: column;
-            padding: 10px;
-            width: 180px;
-        }
-        .menu a {
-            text-decoration: none;
-            color: white;
-            padding: 10px;
-            display: block;
-            text-align: left;
-            border-bottom: 1px solid white;
-            font-size: 16px;
-        }
-        .menu a:last-child {
-            border-bottom: none;
-        }
-        .menu a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+    .menu-toggle div {
+      width: 30px;
+      height: 4px;
+      background-color: white;
+      margin: 5px 0;
+    }
 
+    .menu {
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .menu a {
+      display: block;
+      margin: 8px 0;
+      width: auto;
+      padding: 8px 12px;
+      font-size: 16px;
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .menu a:hover {
+      background: #444;
+    }
         /* ESTILOS DE LA MARCA DE AGUA */
         .watermark {
             position: fixed;
@@ -113,13 +98,6 @@
 </head>
 <body>
     <!-- Botón de menú con forma de pentágono -->
-    <div class="menu-toggle" onclick="toggleMenu()">≡</div>
-    
-    <!-- Menú desplegable -->
-    <div class="menu" id="menu">
-        <a href="index.html">Home page</a>
-        <a href="edtra-maker.html">Edtra Maker</a>
-    </div>
 
     <h1><img src="title.png" alt="Edtra pagine" width="300"></h1>
     <div class="container">
@@ -127,14 +105,27 @@
         <button onclick="location.href='addons.html'">Addons</button>
     </div>
 
+
+  <!-- Botón Hamburguesa -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Menú de Navegación -->
+  <div class="menu" id="menu">
+    <a href="index.html"> Volver al Inicio</a>
+    <a href="edtra_maker.html">️ Edtra Maker</a>
+
     <!-- Marca de agua -->
     <div class="watermark">© Edtra Studios 2025</div>
 
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            menu.style.display = (menu.style.display === "block") ? "none" : "block";
-        }
-    </script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
