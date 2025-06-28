@@ -1,145 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
-    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-    <style>
-        body { 
-            text-align: center; 
-            font-family: 'Minecraft', sans-serif; 
-            background: url('fondo.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white; 
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Principal</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Minecraft', sans-serif;
+      background: url('fondo.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1 { margin-top: 20px; }
+    h1 {
+      margin-top: 20px;
+    }
 
-        .container { margin-top: 50px; }
+    .container {
+      margin-top: 50px;
+    }
 
-        /* Estilos de los botones principales */
-        button { 
-            padding: 15px 40px; 
-            margin: 15px; 
-            font-size: 20px; 
-            cursor: pointer; 
-            border: 3px solid #550000; 
-            border-radius: 8px; 
-            font-family: 'Minecraft', sans-serif;
-            color: white;
-            background: linear-gradient(to bottom, #ff5555, #aa0000);
-            box-shadow: 0px 4px 0px #550000;
-            transition: 0.2s ease-in-out;
-        }
+    button {
+      padding: 15px 40px;
+      margin: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      border: 3px solid #550000;
+      border-radius: 8px;
+      font-family: 'Minecraft', sans-serif;
+      color: white;
+      background: linear-gradient(to bottom, #ff5555, #aa0000);
+      box-shadow: 0px 4px 0px #550000;
+      transition: 0.2s ease-in-out;
+    }
 
-        button:hover { 
-            background: linear-gradient(to bottom, #ff7777, #cc0000); 
-            transform: scale(1.05);
-        }
+    button:hover {
+      background: linear-gradient(to bottom, #ff7777, #cc0000);
+      transform: scale(1.05);
+    }
 
-        button:active {
-            box-shadow: none;
-            transform: translateY(3px);
-        }
+    button:active {
+      box-shadow: none;
+      transform: translateY(3px);
+    }
 
-        /* Botón hamburguesa */
-        .menu-toggle {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            cursor: pointer;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px;
-            border-radius: 6px;
-        }
+    /* Estilo del menú hamburguesa pixel-art */
+    .menu-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      z-index: 100;
+      background: linear-gradient(to bottom, #ffaa00, #cc5500);
+      padding: 10px;
+      border-radius: 8px;
+      border: 3px solid #774400;
+      box-shadow: 0px 4px 0px #774400;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .menu-toggle div {
-            width: 30px;
-            height: 4px;
-            background-color: white;
-            margin: 5px 0;
-        }
+    .menu-toggle:hover {
+      background: linear-gradient(to bottom, #ffcc44, #dd6600);
+      transform: scale(1.05);
+    }
 
-        /* Menú desplegable */
-        .menu {
-            display: none;
-            position: fixed;
-            top: 50px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            font-family: 'Minecraft', sans-serif;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: left;
-        }
+    .menu-toggle:active {
+      box-shadow: none;
+      transform: translateY(3px);
+    }
 
-        .menu a {
-            display: block;
-            margin: 8px 0;
-            width: auto;
-            padding: 8px 12px;
-            font-size: 16px;
-            font-family: 'Minecraft', sans-serif;
-            background: #222;
-            border: 2px solid #555;
-            border-radius: 5px;
-            text-align: left;
-            text-decoration: none;
-            color: white;
-        }
+    .menu-toggle span {
+      font-size: 28px;
+      color: white;
+      font-family: 'Minecraft', sans-serif;
+    }
 
-        .menu a:hover {
-            background: #444;
-        }
+    .menu {
+      display: none;
+      position: fixed;
+      top: 65px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      font-family: 'Minecraft', sans-serif;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid white;
+      text-align: left;
+    }
 
-        /* Marca de agua */
-        .watermark {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            font-size: 14px;
-            opacity: 0.6;
-            font-family: 'Minecraft', sans-serif;
-        }
-    </style>
+    .menu a {
+      display: block;
+      margin: 8px 0;
+      padding: 8px 12px;
+      font-size: 16px;
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 5px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .menu a:hover {
+      background: #444;
+    }
+
+    .watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      opacity: 0.6;
+      font-family: 'Minecraft', sans-serif;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Botón hamburguesa -->
-    <div class="menu-toggle" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
+  <!-- Botón hamburguesa con estilo addons -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span>≡</span>
+  </div>
 
-    <!-- Menú de navegación -->
-    <div class="menu" id="menu">
-        <a href="index.html">Volver al Inicio</a>
-        <a href="edtra-maker.html">Edtra Maker</a>
-    </div>
+  <!-- Menú desplegable -->
+  <div class="menu" id="menu">
+    <a href="index.html">Volver al Inicio</a>
+    <a href="edtra-maker.html">Edtra Maker</a>
+  </div>
 
-    <!-- Título -->
-    <h1><img src="title.png" alt="Edtra pagine" width="300"></h1>
+  <h1><img src="title.png" alt="Edtra pagine" width="300"></h1>
 
-    <!-- Contenido principal -->
-    <div class="container">
-        <button onclick="location.href='sociales.html'">Social Network</button>
-        <button onclick="location.href='addons.html'">Addons</button>
-    </div>
+  <div class="container">
+    <button onclick="location.href='sociales.html'">Social Network</button>
+    <button onclick="location.href='addons.html'">Addons</button>
+  </div>
 
-    <!-- Marca de agua -->
-    <div class="watermark">© Edtra Studios 2025</div>
+  <div class="watermark">© Edtra Studios 2025</div>
 
-    <!-- Script para el menú -->
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
-    </script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
