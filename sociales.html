@@ -40,6 +40,59 @@
             box-shadow: none;
             transform: translateY(3px);
         }
+
+  .menu-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    .menu-toggle div {
+      width: 30px;
+      height: 4px;
+      background-color: white;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .menu a {
+      display: block;
+      margin: 8px 0;
+      width: auto;
+      padding: 8px 12px;
+      font-size: 16px;
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .menu a:hover {
+      background: #444;
+    }
+.watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            opacity: 0.6;
+            font-family: 'Minecraft', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -48,5 +101,24 @@
         <a href="https://x.com/thezonecrafting?t=uO7nOVRnbHztVwlyjxevPQ&s=09" target="_blank">Twitter</a>
         <a href="https://discord.gg/3z2Spr8NuC" target="_blank">Discord</a>
     </div>
+
+  <!-- Botón Hamburguesa -->
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Menú de Navegación -->
+  <div class="menu" id="menu">
+    <a href="index.html"> Volver al Inicio</a>
+    <a href="edtra_maker.html">️ Edtra Maker</a>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
