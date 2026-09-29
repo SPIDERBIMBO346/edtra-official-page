@@ -1,239 +1,2836 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>custom playsound</title>
-  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Custom PlaySound Studio</title>
+
+<link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px;
+    min-height: 100vh;
+
+    font-family: 'Minecraft', sans-serif;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.35),
+            rgba(0,0,0,.65)
+        ),
+        url("fondo.png")
+        no-repeat center center fixed;
+
+    background-size: cover;
+}
+
+/* ==============================
+   HEADER
+============================== */
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header img {
+    width: min(300px, 90%);
+    height: auto;
+}
+
+/* ==============================
+   CONTENEDOR
+============================== */
+
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* ==============================
+   TITULOS
+============================== */
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+/* ==============================
+   PROYECTOS
+============================== */
+
+.project-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(220px, 1fr));
+
+    gap: 20px;
+
+}
+
+/* ==============================
+   TARJETA
+============================== */
+
+.project-card {
+
+    background: rgba(0,0,0,.82);
+
+    border: 3px solid #444;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    transition:
+        transform .15s,
+        border-color .15s;
+
+}
+
+.project-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #55ff55;
+
+}
+
+/* ==============================
+   IMAGEN PROYECTO
+============================== */
+
+.project-image {
+
+    width: 100%;
+
+    height: 180px;
+
+    object-fit: cover;
+
+    image-rendering: pixelated;
+
+    background: #111;
+
+}
+
+/* ==============================
+   INFORMACION
+============================== */
+
+.project-info {
+
+    padding: 15px;
+
+}
+
+.project-name {
+
+    font-size: 20px;
+
+    margin-bottom: 8px;
+
+    color: #55ff55;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+.project-namespace {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    margin-bottom: 8px;
+
+}
+
+.project-sounds {
+
+    color: #ccc;
+
+    font-size: 13px;
+
+}
+
+/* ==============================
+   BOTONES
+============================== */
+
+button {
+
+    font-family: 'Minecraft', sans-serif;
+
+    padding: 10px 16px;
+
+    margin: 5px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    color: white;
+
+    border: 3px solid #005f00;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #00cc00,
+            #006600
+        );
+
+}
+
+button:hover {
+
+    background:
+        linear-gradient(
+            to bottom,
+            #33ff33,
+            #009900
+        );
+
+}
+
+button.blue {
+
+    border-color: #064a80;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #2589dd,
+            #07528c
+        );
+
+}
+
+button.blue:hover {
+
+    background:
+        linear-gradient(
+            to bottom,
+            #4aaaff,
+            #0869ad
+        );
+
+}
+
+button.red {
+
+    border-color: #700000;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #dd3333,
+            #770000
+        );
+
+}
+
+button.red:hover {
+
+    background:
+        linear-gradient(
+            to bottom,
+            #ff5555,
+            #990000
+        );
+
+}
+
+button.gray {
+
+    border-color: #444;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #777,
+            #333
+        );
+
+}
+
+/* ==============================
+   CREAR
+============================== */
+
+.create-card {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 300px;
+
+    background: rgba(0,0,0,.55);
+
+    border: 3px dashed #555;
+
+    border-radius: 10px;
+
+}
+
+.create-card button {
+
+    font-size: 18px;
+
+}
+
+/* ==============================
+   MODAL
+============================== */
+
+.modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.85);
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 1000;
+
+    padding: 20px;
+
+}
+
+.modal-box {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #171717;
+
+    border: 3px solid #555;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+}
+
+.modal-box h2 {
+
+    margin-top: 0;
+
+    color: #55ff55;
+
+}
+
+.modal-box label {
+
+    display: block;
+
+    margin-top: 15px;
+
+    margin-bottom: 5px;
+
+}
+
+.modal-box input {
+
+    width: 100%;
+
+    padding: 11px;
+
+    font-family: 'Minecraft', sans-serif;
+
+    background: #222;
+
+    border: 2px solid #555;
+
+    color: white;
+
+    border-radius: 6px;
+
+}
+
+/* ==============================
+   PREVIEW IMAGEN
+============================== */
+
+.image-preview {
+
+    display: none;
+
+    width: 160px;
+
+    height: 160px;
+
+    object-fit: cover;
+
+    image-rendering: pixelated;
+
+    margin: 15px auto;
+
+    border: 3px solid #555;
+
+}
+
+/* ==============================
+   EDITOR
+============================== */
+
+#editor {
+
+    display: none;
+
+}
+
+.editor-container {
+
+    width: 95%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    background: rgba(0,0,0,.85);
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+}
+
+.editor-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 25px;
+
+}
+
+.editor-icon {
+
+    width: 100px;
+
+    height: 100px;
+
+    object-fit: cover;
+
+    image-rendering: pixelated;
+
+    border: 3px solid #555;
+
+}
+
+.editor-title {
+
+    flex: 1;
+
+}
+
+.editor-title h1 {
+
+    margin: 0;
+
+    color: #55ff55;
+
+}
+
+.editor-title p {
+
+    color: #aaa;
+
+}
+
+/* ==============================
+   CONFIG
+============================== */
+
+.panel {
+
+    background: rgba(255,255,255,.05);
+
+    border: 1px solid #444;
+
+    padding: 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+
+}
+
+.panel h2 {
+
+    margin-top: 0;
+
+}
+
+.config-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 15px;
+
+}
+
+.config-grid label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #aaa;
+
+}
+
+.config-grid input {
+
+    width: 100%;
+
+    padding: 10px;
+
+    background: #222;
+
+    border: 2px solid #555;
+
+    color: white;
+
+    border-radius: 5px;
+
+    font-family: 'Minecraft', sans-serif;
+
+}
+
+/* ==============================
+   SONIDOS
+============================== */
+
+.sound-entry {
+
+    background: rgba(0,0,0,.5);
+
+    border: 2px solid #444;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+}
+
+.sound-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+}
+
+.sound-number {
+
+    color: #55ff55;
+
+}
+
+.sound-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+
+    gap: 10px;
+
+    margin-top: 10px;
+
+}
+
+.sound-grid input,
+.sound-grid select {
+
+    width: 100%;
+
+    padding: 9px;
+
+    background: #222;
+
+    color: white;
+
+    border: 2px solid #555;
+
+    border-radius: 5px;
+
+    font-family: 'Minecraft', sans-serif;
+
+}
+
+.sound-id {
+
+    margin-top: 10px;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+}
+
+.sound-id strong {
+
+    color: #55ff55;
+
+}
+
+audio {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+}
+
+/* ==============================
+   VACIO
+============================== */
+
+.empty {
+
+    text-align: center;
+
+    color: #aaa;
+
+    padding: 50px 20px;
+
+}
+
+/* ==============================
+   TOAST
+============================== */
+
+#toast {
+
+    position: fixed;
+
+    bottom: 25px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: #111;
+
+    border: 2px solid #55ff55;
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 7px;
+
+    display: none;
+
+    z-index: 5000;
+
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media(max-width:600px) {
+
     body {
-      font-family: 'Minecraft', sans-serif;
-      background: url('fondo.png') no-repeat center center fixed;
-      background-size: cover;
-      text-align: center;
-      color: white;
-      margin: 0;
-      padding: 20px;
+        padding: 10px;
     }
-    h1 { font-size: 24px; }
-    .container {
-      width: 80%;
-      margin: auto;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 10px;
+
+    .project-grid {
+        grid-template-columns: 1fr;
     }
-    .sound-entry { margin-bottom: 10px; }
-    input {
-      font-family: 'Minecraft', sans-serif;
-      padding: 5px;
-      width: 200px;
-      text-align: center;
-      background: #222;
-      border: 2px solid #555;
-      color: white;
+
+    .editor-container {
+        padding: 15px;
     }
-    button {
-      font-family: 'Minecraft', sans-serif;
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      border: 3px solid #005f00;
-      border-radius: 8px;
-      background: linear-gradient(to bottom, #00cc00, #006600);
-      color: white;
-    }
-    button:hover {
-      background: linear-gradient(to bottom, #33ff33, #009900);
-    }
-    #instructions-btn {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      font-size: 14px;
-    }
-    #instructions {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.9);
-      padding: 15px;
-      border-radius: 10px;
-      text-align: left;
-      width: 80%;
-      max-width: 300px;
-      font-size: 14px;
-      overflow-y: auto;
-      max-height: 400px;
-    }
-    #instructions p { margin: 10px 0; }
-  </style>
+
+}
+
+</style>
 </head>
+
+
 <body>
-  <button id="instructions-btn" onclick="toggleInstructions()">📖 Instrucciones</button>
-  <div id="instructions">
-    <h2>📖 Instrucciones</h2>
-    <p><b>Ejecutar sonido en Minecraft:</b></p>
-    <p>Nombre: <code>mi_sonido</code></p>
-    <p>En Minecraft: <code>/playsound mi_sonido @s</code></p>
 
-    <p><b>Ruta del archivo .ogg:</b></p>
-    <p>Debe terminar en <code>.ogg</code>. Ejemplo: <code>carpeta/sonido.ogg</code></p>
 
-    <p><b>Exportar:</b></p>
-    <p>Puedes cambiar el nombre del addon antes de exportarlo. Tu progreso se guarda hasta que reinicies o edites algo.</p>
+<!-- =====================================================
+     PANTALLA DE PROYECTOS
+===================================================== -->
 
-    <button onclick="toggleInstructions()">Cerrar</button>
-  </div>
+<div id="projectsScreen">
 
-      <h1><img src="sonido.png" alt="Custom Playsound" width="300"></h1>
+<header>
 
-  <div class="container">
-    <input id="packName" placeholder="Nombre del Addon (ej: edtra_sonidos)">
-    <div id="soundList"></div>
-    <button onclick="addSound()">➕ Agregar Sonido</button>
-    <button onclick="exportZip()">📦 Exportar archivo</button>
-  </div>
+<img
+src="sonido.png"
+alt="Custom PlaySound">
 
-  <script>
-    let sounds = JSON.parse(localStorage.getItem("soundList")) || [];
+</header>
 
-    function toggleInstructions() {
-      let menu = document.getElementById("instructions");
-      menu.style.display = menu.style.display === "none" ? "block" : "none";
-    }
 
-    function saveToLocalStorage() {
-      localStorage.setItem("soundList", JSON.stringify(sounds));
-    }
+<div class="container">
 
-    function addSound() {
-      let container = document.getElementById("soundList");
-      let index = sounds.length;
-      sounds.push({ name: "", path: "" });
-      saveToLocalStorage();
+<h1 class="title">
+🗂️ MIS PROYECTOS
+</h1>
 
-      let div = document.createElement("div");
-      div.className = "sound-entry";
-      div.innerHTML = `
-        <input type="text" placeholder="Nombre" id="name${index}" oninput="updateSound(${index})">
-        <input type="text" placeholder="Ruta .ogg" id="path${index}" oninput="updateSound(${index})">
-        <input type="file" id="file${index}" accept="audio/ogg">
-        <button onclick="removeSound(${index})">❌</button>
-      `;
-      container.appendChild(div);
-    }
+<p class="subtitle">
+Crea y administra tus Add-Ons de sonidos personalizados
+</p>
 
-    function removeSound(index) {
-      sounds.splice(index, 1);
-      saveToLocalStorage();
-      location.reload(); // recargar para reordenar índices y entradas
-    }
 
-    function updateSound(index) {
-      sounds[index].name = document.getElementById(`name${index}`).value;
-      sounds[index].path = document.getElementById(`path${index}`).value;
-      saveToLocalStorage();
-    }
+<div
+id="projectGrid"
+class="project-grid">
+</div>
 
-    function loadSavedSounds() {
-      let container = document.getElementById("soundList");
-      sounds.forEach((s, i) => {
-        let div = document.createElement("div");
-        div.className = "sound-entry";
-        div.innerHTML = `
-          <input type="text" value="${s.name}" placeholder="Nombre" id="name${i}" oninput="updateSound(${i})">
-          <input type="text" value="${s.path}" placeholder="Ruta .ogg" id="path${i}" oninput="updateSound(${i})">
-          <input type="file" id="file${i}" accept="audio/ogg">
-          <button onclick="removeSound(${i})">❌</button>
-        `;
-        container.appendChild(div);
-      });
-    }
+</div>
 
-    async function exportZip() {
-      let json = {};
-      let zip = new JSZip();
-      let soundFolder = zip.folder("sounds");
-      let filePromises = [];
+</div>
 
-      for (let i = 0; i < sounds.length; i++) {
-        let name = document.getElementById(`name${i}`).value.trim();
-        let path = document.getElementById(`path${i}`).value.trim();
-        let fileInput = document.getElementById(`file${i}`);
-        let file = fileInput.files[0];
 
-        if (!name || !path || !file) {
-          alert("Completa todos los campos y sube el archivo .ogg.");
-          return;
-        }
+<!-- =====================================================
+     EDITOR
+===================================================== -->
 
-        if (!path.endsWith(".ogg")) {
-          alert("La ruta debe terminar en '.ogg'.");
-          return;
-        }
+<div id="editor">
 
-        json[name] = {
-          category: "music",
-          sounds: ["sounds/" + path.replace(".ogg", "")]
+<div class="editor-container">
+
+
+<div class="editor-header">
+
+<img
+id="editorIcon"
+class="editor-icon"
+src="sonido.png"
+>
+
+<div class="editor-title">
+
+<h1 id="editorProjectName">
+Proyecto
+</h1>
+
+<p id="editorNamespace">
+namespace
+</p>
+
+</div>
+
+<button
+class="gray"
+onclick="backToProjects()">
+
+⬅️ Proyectos
+
+</button>
+
+</div>
+
+
+<!-- CONFIGURACIÓN -->
+
+<div class="panel">
+
+<h2>⚙️ Configuración del proyecto</h2>
+
+<div class="config-grid">
+
+<div>
+
+<label>
+Nombre del Add-On
+</label>
+
+<input
+id="packName"
+oninput="updateProject()"
+>
+
+</div>
+
+
+<div>
+
+<label>
+Namespace
+</label>
+
+<input
+id="namespace"
+oninput="updateProject()"
+>
+
+</div>
+
+</div>
+
+<br>
+
+<button
+class="gray"
+onclick="changeProjectImage()">
+
+🖼️ Cambiar imagen
+
+</button>
+
+</div>
+
+
+<!-- SONIDOS -->
+
+<div class="panel">
+
+<h2>🎵 Sonidos</h2>
+
+<div id="soundList"></div>
+
+
+<button
+onclick="addSound()">
+
+➕ Agregar sonido
+
+</button>
+
+</div>
+
+
+<!-- EXPORTAR -->
+
+<div class="panel">
+
+<h2>📦 Exportar</h2>
+
+<p>
+Cuando exportes se generará un Resource Pack
+compatible con Minecraft Bedrock.
+</p>
+
+<button
+class="blue"
+onclick="exportProject()">
+
+📦 Exportar .MCPACK
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL CREAR PROYECTO
+===================================================== -->
+
+<div
+id="createModal"
+class="modal">
+
+<div class="modal-box">
+
+<h2>
+🆕 Nuevo proyecto
+</h2>
+
+
+<label>
+Nombre del proyecto
+</label>
+
+<input
+id="newName"
+placeholder="Mi Sound Pack"
+>
+
+
+<label>
+Namespace
+</label>
+
+<input
+id="newNamespace"
+placeholder="miaddon"
+>
+
+
+<label>
+Imagen del proyecto
+</label>
+
+<input
+id="newImage"
+type="file"
+accept="image/png,image/jpeg,image/webp"
+onchange="previewNewImage(event)"
+>
+
+
+<img
+id="newImagePreview"
+class="image-preview"
+>
+
+
+<div style="text-align:center;margin-top:20px;">
+
+<button
+onclick="createProject()">
+
+🆕 Crear proyecto
+
+</button>
+
+<button
+class="gray"
+onclick="closeCreateModal()">
+
+Cancelar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL CAMBIAR IMAGEN
+===================================================== -->
+
+<div
+id="imageModal"
+class="modal">
+
+<div class="modal-box">
+
+<h2>
+🖼️ Cambiar imagen
+</h2>
+
+<input
+id="changeImageInput"
+type="file"
+accept="image/png,image/jpeg,image/webp"
+>
+
+
+<div style="text-align:center;margin-top:20px;">
+
+<button
+onclick="saveNewProjectImage()">
+
+Guardar
+
+</button>
+
+<button
+class="gray"
+onclick="closeImageModal()">
+
+Cancelar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="toast">
+Guardado
+</div>
+
+
+<script>
+
+/* =====================================================
+   INDEXED DB
+===================================================== */
+
+const DB_NAME =
+"CustomPlaySoundStudio";
+
+const DB_VERSION = 1;
+
+const STORE_NAME =
+"projects";
+
+let db;
+
+let currentProjectId = null;
+
+
+/* =====================================================
+   ABRIR DB
+===================================================== */
+
+function openDB() {
+
+    return new Promise((resolve,reject) => {
+
+        const request =
+            indexedDB.open(
+                DB_NAME,
+                DB_VERSION
+            );
+
+
+        request.onupgradeneeded =
+        function(event) {
+
+            const database =
+                event.target.result;
+
+
+            if (!database.objectStoreNames.contains(STORE_NAME)) {
+
+                database.createObjectStore(
+                    STORE_NAME,
+                    {
+                        keyPath: "id"
+                    }
+                );
+
+            }
+
         };
 
-        let reader = new FileReader();
-        let promise = new Promise((resolve) => {
-          reader.onload = function (e) {
-            soundFolder.file(path, e.target.result);
-            resolve();
-          };
-          reader.readAsArrayBuffer(file);
-        });
 
-        filePromises.push(promise);
-      }
+        request.onsuccess =
+        function(event) {
 
-      await Promise.all(filePromises);
+            db =
+                event.target.result;
 
-      let soundJson = JSON.stringify(json, null, 4);
-      let addonName = document.getElementById("packName").value || "Sound Pack";
-      let manifest = {
-        format_version: 2,
-        header: {
-          name: addonName,
-          description: "Paquete de sonidos personalizado",
-          uuid: crypto.randomUUID(),
-          version: [1, 0, 0],
-          min_engine_version: [1, 19, 0]
-        },
-        modules: [{
-          type: "resources",
-          uuid: crypto.randomUUID(),
-          version: [1, 0, 0]
-        }]
-      };
+            resolve(db);
 
-      zip.folder("sounds").file("sound_definitions.json", soundJson);
-      zip.file("manifest.json", JSON.stringify(manifest, null, 4));
+        };
 
-      try {
-        await navigator.clipboard.writeText(soundJson);
-        alert("¡sound_definitions.json copiado al portapapeles!");
-      } catch (err) {
-        alert("No se pudo copiar el JSON.");
-      }
 
-      zip.generateAsync({ type: "blob" }).then(content => {
-        let a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = `${addonName.replace(/\s+/g, "_").toLowerCase()}.mcpack.zip`;
-        a.click();
-      });
+        request.onerror =
+        function() {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+
+/* =====================================================
+   GUARDAR PROYECTO
+===================================================== */
+
+function saveProject(project) {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+            store.put(project);
+
+            transaction.oncomplete =
+                () => resolve();
+
+            transaction.onerror =
+                () => reject(
+                    transaction.error
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OBTENER TODOS
+===================================================== */
+
+function getProjects() {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readonly"
+                );
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+            const request =
+                store.getAll();
+
+            request.onsuccess =
+                () => resolve(
+                    request.result
+                );
+
+            request.onerror =
+                () => reject(
+                    request.error
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OBTENER UNO
+===================================================== */
+
+function getProject(id) {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readonly"
+                );
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+            const request =
+                store.get(id);
+
+            request.onsuccess =
+                () => resolve(
+                    request.result
+                );
+
+            request.onerror =
+                () => reject(
+                    request.error
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ELIMINAR
+===================================================== */
+
+function deleteProjectDB(id) {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+            store.delete(id);
+
+            transaction.oncomplete =
+                () => resolve();
+
+            transaction.onerror =
+                () => reject(
+                    transaction.error
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREAR PROYECTO
+===================================================== */
+
+async function createProject() {
+
+    const name =
+        document
+        .getElementById("newName")
+        .value
+        .trim();
+
+
+    const namespace =
+        document
+        .getElementById("newNamespace")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    if (!name) {
+
+        alert(
+            "Escribe un nombre para el proyecto."
+        );
+
+        return;
+
     }
 
-    // Cargar sonidos guardados al iniciar
-    window.onload = loadSavedSounds;
-  </script>
+
+    if (!namespace) {
+
+        alert(
+            "Escribe un namespace."
+        );
+
+        return;
+
+    }
+
+
+    const imageInput =
+        document
+        .getElementById("newImage");
+
+
+    let imageData = null;
+
+
+    if (imageInput.files[0]) {
+
+        imageData =
+            await fileToDataURL(
+                imageInput.files[0]
+            );
+
+    }
+
+
+    const project = {
+
+        id:
+            crypto.randomUUID(),
+
+        name:
+
+            name,
+
+        namespace:
+
+            namespace,
+
+        packName:
+
+            name,
+
+        image:
+
+            imageData,
+
+        sounds:
+
+            [],
+
+        created:
+
+            Date.now(),
+
+        modified:
+
+            Date.now()
+
+    };
+
+
+    await saveProject(project);
+
+
+    closeCreateModal();
+
+    clearCreateForm();
+
+    await showProjects();
+
+    openEditor(project.id);
+
+}
+
+
+/* =====================================================
+   MOSTRAR PROYECTOS
+===================================================== */
+
+async function showProjects() {
+
+    const grid =
+        document
+        .getElementById(
+            "projectGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    const projects =
+        await getProjects();
+
+
+    if (projects.length === 0) {
+
+        grid.innerHTML = `
+
+        <div class="create-card">
+
+            <button
+            onclick="openCreateModal()">
+
+                🆕 Crear mi primer proyecto
+
+            </button>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    projects
+    .sort(
+        (a,b) =>
+        b.modified -
+        a.modified
+    )
+    .forEach(
+        project => {
+
+            const card =
+                document
+                .createElement("div");
+
+            card.className =
+                "project-card";
+
+
+            const image =
+                project.image ||
+                "sonido.png";
+
+
+            card.innerHTML = `
+
+            <img
+            class="project-image"
+            src="${image}"
+            >
+
+            <div class="project-info">
+
+                <div
+                class="project-name"
+                title="${escapeHTML(project.name)}">
+
+                    ${escapeHTML(project.name)}
+
+                </div>
+
+                <div class="project-namespace">
+
+                    🆔
+                    ${escapeHTML(project.namespace)}
+
+                </div>
+
+                <div class="project-sounds">
+
+                    🎵
+                    ${project.sounds.length}
+                    sonido(s)
+
+                </div>
+
+                <br>
+
+                <button
+                onclick="openEditor('${project.id}')">
+
+                    ✏️ Abrir
+
+                </button>
+
+                <button
+                class="red"
+                onclick="removeProject('${project.id}')">
+
+                    🗑️
+
+                </button>
+
+            </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+
+    const createCard =
+        document.createElement("div");
+
+    createCard.className =
+        "create-card";
+
+
+    createCard.innerHTML = `
+
+        <button
+        onclick="openCreateModal()">
+
+            ➕ Nuevo proyecto
+
+        </button>
+
+    `;
+
+
+    grid.appendChild(
+        createCard
+    );
+
+}
+
+
+/* =====================================================
+   ABRIR EDITOR
+===================================================== */
+
+async function openEditor(id) {
+
+    const project =
+        await getProject(id);
+
+
+    if (!project)
+        return;
+
+
+    currentProjectId =
+        id;
+
+
+    document
+    .getElementById(
+        "projectsScreen"
+    )
+    .style.display =
+        "none";
+
+
+    document
+    .getElementById(
+        "editor"
+    )
+    .style.display =
+        "block";
+
+
+    document
+    .getElementById(
+        "editorProjectName"
+    )
+    .textContent =
+        project.name;
+
+
+    document
+    .getElementById(
+        "editorNamespace"
+    )
+    .textContent =
+        project.namespace;
+
+
+    document
+    .getElementById(
+        "packName"
+    )
+    .value =
+        project.packName;
+
+
+    document
+    .getElementById(
+        "namespace"
+    )
+    .value =
+        project.namespace;
+
+
+    document
+    .getElementById(
+        "editorIcon"
+    )
+    .src =
+        project.image ||
+        "sonido.png";
+
+
+    renderSounds(
+        project
+    );
+
+}
+
+
+/* =====================================================
+   VOLVER
+===================================================== */
+
+async function backToProjects() {
+
+    currentProjectId =
+        null;
+
+
+    document
+    .getElementById(
+        "editor"
+    )
+    .style.display =
+        "none";
+
+
+    document
+    .getElementById(
+        "projectsScreen"
+    )
+    .style.display =
+        "block";
+
+
+    await showProjects();
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR PROYECTO
+===================================================== */
+
+async function updateProject() {
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    if (!project)
+        return;
+
+
+    project.packName =
+        document
+        .getElementById(
+            "packName"
+        )
+        .value;
+
+
+    project.namespace =
+        document
+        .getElementById(
+            "namespace"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    document
+    .getElementById(
+        "editorProjectName"
+    )
+    .textContent =
+        project.name;
+
+
+    document
+    .getElementById(
+        "editorNamespace"
+    )
+    .textContent =
+        project.namespace;
+
+
+    renderSounds(
+        project
+    );
+
+}
+
+
+/* =====================================================
+   AGREGAR SONIDO
+===================================================== */
+
+async function addSound() {
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    if (!project)
+        return;
+
+
+    project.sounds.push({
+
+        id:
+            crypto.randomUUID(),
+
+        name:
+            "",
+
+        path:
+            "",
+
+        category:
+            "music",
+
+        fileName:
+            null,
+
+        fileData:
+            null,
+
+        mime:
+            "audio/ogg"
+
+    });
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    renderSounds(
+        project
+    );
+
+}
+
+
+/* =====================================================
+   RENDER SONIDOS
+===================================================== */
+
+function renderSounds(project) {
+
+    const list =
+        document
+        .getElementById(
+            "soundList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (
+        !project.sounds.length
+    ) {
+
+        list.innerHTML = `
+
+        <div class="empty">
+
+            🎵 Todavía no hay sonidos.
+
+            <br><br>
+
+            Pulsa
+            <strong>Agregar sonido</strong>
+            para comenzar.
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    project.sounds.forEach(
+        (sound,index) => {
+
+            const entry =
+                document
+                .createElement("div");
+
+
+            entry.className =
+                "sound-entry";
+
+
+            const fullID =
+                project.namespace
+                ? project.namespace +
+                  "." +
+                  (sound.name || "sonido")
+                : "namespace.sonido";
+
+
+            entry.innerHTML = `
+
+            <div class="sound-top">
+
+                <span class="sound-number">
+
+                    🎵 Sonido #${index + 1}
+
+                </span>
+
+                <button
+                class="red"
+                onclick="removeSound('${sound.id}')">
+
+                    ❌ Eliminar
+
+                </button>
+
+            </div>
+
+
+            <div class="sound-grid">
+
+                <div>
+
+                    <input
+                    type="text"
+                    placeholder="ID del sonido"
+                    value="${escapeHTML(sound.name)}"
+                    onchange="updateSoundField('${sound.id}','name',this.value)"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <input
+                    type="text"
+                    placeholder="Ruta dentro de sounds/"
+                    value="${escapeHTML(sound.path)}"
+                    onchange="updateSoundField('${sound.id}','path',this.value)"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <select
+                    onchange="updateSoundField('${sound.id}','category',this.value)"
+                    >
+
+                        ${categoryOptions(sound.category)}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="sound-id">
+
+                ID:
+
+                <strong>
+                    ${escapeHTML(fullID)}
+                </strong>
+
+            </div>
+
+
+            <input
+            type="file"
+            accept=".ogg,audio/ogg"
+            onchange="attachSoundFile('${sound.id}',this.files[0])"
+            >
+
+
+            ${
+                sound.fileData
+                ?
+                `<audio controls src="${sound.fileData}"></audio>`
+                :
+                `<div class="sound-id">
+                    ⚠️ No hay archivo .ogg seleccionado
+                </div>`
+            }
+
+            `;
+
+
+            list.appendChild(
+                entry
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CATEGORÍAS
+===================================================== */
+
+function categoryOptions(selected) {
+
+    const categories = [
+
+        ["music","Music"],
+
+        ["ambient","Ambient"],
+
+        ["hostile","Hostile"],
+
+        ["player","Player"],
+
+        ["neutral","Neutral"],
+
+        ["block","Block"],
+
+        ["weather","Weather"],
+
+        ["ui","UI"]
+
+    ];
+
+
+    return categories
+    .map(
+        category => `
+
+        <option
+        value="${category[0]}"
+        ${selected === category[0]
+            ? "selected"
+            : ""}>
+
+            ${category[1]}
+
+        </option>
+
+        `
+    )
+    .join("");
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR SONIDO
+===================================================== */
+
+async function updateSoundField(
+    soundId,
+    field,
+    value
+) {
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    const sound =
+        project.sounds.find(
+            s => s.id === soundId
+        );
+
+
+    if (!sound)
+        return;
+
+
+    sound[field] =
+        value;
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    renderSounds(
+        project
+    );
+
+}
+
+
+/* =====================================================
+   GUARDAR ARCHIVO OGG
+===================================================== */
+
+async function attachSoundFile(
+    soundId,
+    file
+) {
+
+    if (!file)
+        return;
+
+
+    if (
+        !file.name
+        .toLowerCase()
+        .endsWith(".ogg")
+    ) {
+
+        alert(
+            "El archivo debe ser .ogg"
+        );
+
+        return;
+
+    }
+
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    const sound =
+        project.sounds.find(
+            s => s.id === soundId
+        );
+
+
+    if (!sound)
+        return;
+
+
+    sound.fileName =
+        file.name;
+
+
+    sound.fileData =
+        await fileToDataURL(file);
+
+
+    sound.mime =
+        file.type ||
+        "audio/ogg";
+
+
+    if (!sound.path) {
+
+        sound.path =
+            file.name;
+
+    }
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    renderSounds(
+        project
+    );
+
+
+    toast(
+        "🎵 Sonido guardado"
+    );
+
+}
+
+
+/* =====================================================
+   ELIMINAR SONIDO
+===================================================== */
+
+async function removeSound(
+    soundId
+) {
+
+    if (
+        !confirm(
+            "¿Eliminar este sonido?"
+        )
+    )
+        return;
+
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    project.sounds =
+        project.sounds.filter(
+            s => s.id !== soundId
+        );
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    renderSounds(
+        project
+    );
+
+}
+
+
+/* =====================================================
+   IMAGEN DEL PROYECTO
+===================================================== */
+
+function changeProjectImage() {
+
+    document
+    .getElementById(
+        "imageModal"
+    )
+    .style.display =
+        "flex";
+
+}
+
+
+async function saveNewProjectImage() {
+
+    const input =
+        document
+        .getElementById(
+            "changeImageInput"
+        );
+
+
+    if (!input.files[0])
+        return;
+
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    project.image =
+        await fileToDataURL(
+            input.files[0]
+        );
+
+
+    project.modified =
+        Date.now();
+
+
+    await saveProject(
+        project
+    );
+
+
+    document
+    .getElementById(
+        "editorIcon"
+    )
+    .src =
+        project.image;
+
+
+    closeImageModal();
+
+
+    toast(
+        "🖼️ Imagen actualizada"
+    );
+
+}
+
+
+/* =====================================================
+   ELIMINAR PROYECTO
+===================================================== */
+
+async function removeProject(id) {
+
+    const project =
+        await getProject(id);
+
+
+    if (!project)
+        return;
+
+
+    if (
+        !confirm(
+            `¿Eliminar "${project.name}"?`
+        )
+    )
+        return;
+
+
+    await deleteProjectDB(
+        id
+    );
+
+
+    await showProjects();
+
+
+    toast(
+        "🗑️ Proyecto eliminado"
+    );
+
+}
+
+
+/* =====================================================
+   EXPORTAR MCPACK
+===================================================== */
+
+async function exportProject() {
+
+    const project =
+        await getProject(
+            currentProjectId
+        );
+
+
+    if (!project)
+        return;
+
+
+    if (
+        project.sounds.length === 0
+    ) {
+
+        alert(
+            "Agrega al menos un sonido."
+        );
+
+        return;
+
+    }
+
+
+    const zip =
+        new JSZip();
+
+
+    /* ==============================
+       SOUNDS
+    ============================== */
+
+    const soundsFolder =
+        zip.folder(
+            "sounds"
+        );
+
+
+    const definitions = {};
+
+
+    for (
+        const sound of project.sounds
+    ) {
+
+        if (
+            !sound.name ||
+            !sound.path
+        ) {
+
+            alert(
+                "Todos los sonidos necesitan ID y ruta."
+            );
+
+            return;
+
+        }
+
+
+        if (!sound.fileData) {
+
+            alert(
+                `Falta el archivo .ogg de "${sound.name}".`
+            );
+
+            return;
+
+        }
+
+
+        const buffer =
+            dataURLToArrayBuffer(
+                sound.fileData
+            );
+
+
+        const cleanPath =
+            sound.path
+            .replace(
+                /^\/+/,
+                ""
+            )
+            .replace(
+                /\.ogg$/i,
+                ""
+            );
+
+
+        soundsFolder.file(
+            cleanPath + ".ogg",
+            buffer
+        );
+
+
+        const soundID =
+            project.namespace +
+            "." +
+            sound.name;
+
+
+        definitions[soundID] = {
+
+            category:
+                sound.category,
+
+            sounds: [
+
+                "sounds/" +
+                cleanPath
+
+            ]
+
+        };
+
+    }
+
+
+    /* ==============================
+       SOUND DEFINITIONS
+    ============================== */
+
+    soundsFolder.file(
+
+        "sound_definitions.json",
+
+        JSON.stringify(
+            definitions,
+            null,
+            4
+        )
+
+    );
+
+
+    /* ==============================
+       MANIFEST
+    ============================== */
+
+    const headerUUID =
+        crypto.randomUUID();
+
+
+    const moduleUUID =
+        crypto.randomUUID();
+
+
+    const manifest = {
+
+        format_version: 2,
+
+        header: {
+
+            name:
+                project.packName ||
+                project.name,
+
+            description:
+                "Custom Sound Pack",
+
+            uuid:
+                headerUUID,
+
+            version:
+                [1,0,0],
+
+            min_engine_version:
+                [1,19,0]
+
+        },
+
+        modules: [
+
+            {
+
+                description:
+                    "Custom sounds",
+
+                type:
+                    "resources",
+
+                uuid:
+                    moduleUUID,
+
+                version:
+                    [1,0,0]
+
+            }
+
+        ]
+
+    };
+
+
+    zip.file(
+
+        "manifest.json",
+
+        JSON.stringify(
+            manifest,
+            null,
+            4
+        )
+
+    );
+
+
+    /* ==============================
+       ICON
+    ============================== */
+
+    if (project.image) {
+
+        const iconBuffer =
+            dataURLToArrayBuffer(
+                project.image
+            );
+
+
+        zip.file(
+            "pack_icon.png",
+            iconBuffer
+        );
+
+    }
+
+
+    /* ==============================
+       GENERAR
+    ============================== */
+
+    const blob =
+        await zip.generateAsync({
+
+            type:
+                "blob",
+
+            compression:
+                "DEFLATE",
+
+            compressionOptions: {
+
+                level: 6
+
+            }
+
+        });
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href =
+        url;
+
+
+    a.download =
+        sanitizeFileName(
+            project.name
+        ) +
+        ".mcpack";
+
+
+    document
+    .body
+    .appendChild(a);
+
+
+    a.click();
+
+
+    a.remove();
+
+
+    setTimeout(
+        () =>
+        URL.revokeObjectURL(url),
+        1000
+    );
+
+
+    toast(
+        "📦 ¡MCPACK generado!"
+    );
+
+}
+
+
+/* =====================================================
+   MODALES
+===================================================== */
+
+function openCreateModal() {
+
+    document
+    .getElementById(
+        "createModal"
+    )
+    .style.display =
+        "flex";
+
+}
+
+
+function closeCreateModal() {
+
+    document
+    .getElementById(
+        "createModal"
+    )
+    .style.display =
+        "none";
+
+}
+
+
+function closeImageModal() {
+
+    document
+    .getElementById(
+        "imageModal"
+    )
+    .style.display =
+        "none";
+
+}
+
+
+function clearCreateForm() {
+
+    document
+    .getElementById(
+        "newName"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "newNamespace"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "newImage"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "newImagePreview"
+    )
+    .style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+function previewNewImage(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file)
+        return;
+
+
+    const preview =
+        document
+        .getElementById(
+            "newImagePreview"
+        );
+
+
+    preview.src =
+        URL.createObjectURL(
+            file
+        );
+
+
+    preview.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function fileToDataURL(file) {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                () =>
+                resolve(
+                    reader.result
+                );
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+function dataURLToArrayBuffer(
+    dataURL
+) {
+
+    const base64 =
+        dataURL.split(",")[1];
+
+
+    const binary =
+        atob(base64);
+
+
+    const bytes =
+        new Uint8Array(
+            binary.length
+        );
+
+
+    for (
+        let i = 0;
+        i < binary.length;
+        i++
+    ) {
+
+        bytes[i] =
+            binary.charCodeAt(i);
+
+    }
+
+
+    return bytes.buffer;
+
+}
+
+
+function sanitizeFileName(name) {
+
+    return name
+        .replace(
+            /[<>:"/\\|?*]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            "_"
+        )
+        .toLowerCase();
+
+}
+
+
+function escapeHTML(text) {
+
+    return String(
+        text ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+
+function toast(message) {
+
+    const element =
+        document
+        .getElementById(
+            "toast"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                element.style.display =
+                    "none";
+
+            },
+            2000
+        );
+
+}
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+async function init() {
+
+    try {
+
+        await openDB();
+
+        await showProjects();
+
+    }
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "No se pudo iniciar el sistema de proyectos."
+        );
+
+    }
+
+}
+
+
+init();
+
+</script>
+
 </body>
 </html>
