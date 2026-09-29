@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -81,14 +80,12 @@ header img {
 ============================== */
 
 .project-grid {
-
     display: grid;
 
     grid-template-columns:
         repeat(auto-fill, minmax(220px, 1fr));
 
     gap: 20px;
-
 }
 
 /* ==============================
@@ -96,7 +93,6 @@ header img {
 ============================== */
 
 .project-card {
-
     background: rgba(0,0,0,.82);
 
     border: 3px solid #444;
@@ -108,15 +104,11 @@ header img {
     transition:
         transform .15s,
         border-color .15s;
-
 }
 
 .project-card:hover {
-
     transform: translateY(-4px);
-
     border-color: #55ff55;
-
 }
 
 /* ==============================
@@ -124,7 +116,6 @@ header img {
 ============================== */
 
 .project-image {
-
     width: 100%;
 
     height: 180px;
@@ -134,7 +125,6 @@ header img {
     image-rendering: pixelated;
 
     background: #111;
-
 }
 
 /* ==============================
@@ -142,13 +132,10 @@ header img {
 ============================== */
 
 .project-info {
-
     padding: 15px;
-
 }
 
 .project-name {
-
     font-size: 20px;
 
     margin-bottom: 8px;
@@ -160,25 +147,20 @@ header img {
     text-overflow: ellipsis;
 
     white-space: nowrap;
-
 }
 
 .project-namespace {
-
     color: #aaa;
 
     font-size: 13px;
 
     margin-bottom: 8px;
-
 }
 
 .project-sounds {
-
     color: #ccc;
 
     font-size: 13px;
-
 }
 
 /* ==============================
@@ -186,7 +168,6 @@ header img {
 ============================== */
 
 button {
-
     font-family: 'Minecraft', sans-serif;
 
     padding: 10px 16px;
@@ -209,22 +190,18 @@ button {
             #00cc00,
             #006600
         );
-
 }
 
 button:hover {
-
     background:
         linear-gradient(
             to bottom,
             #33ff33,
             #009900
         );
-
 }
 
 button.blue {
-
     border-color: #064a80;
 
     background:
@@ -233,22 +210,18 @@ button.blue {
             #2589dd,
             #07528c
         );
-
 }
 
 button.blue:hover {
-
     background:
         linear-gradient(
             to bottom,
             #4aaaff,
             #0869ad
         );
-
 }
 
 button.red {
-
     border-color: #700000;
 
     background:
@@ -257,22 +230,18 @@ button.red {
             #dd3333,
             #770000
         );
-
 }
 
 button.red:hover {
-
     background:
         linear-gradient(
             to bottom,
             #ff5555,
             #990000
         );
-
 }
 
 button.gray {
-
     border-color: #444;
 
     background:
@@ -281,7 +250,6 @@ button.gray {
             #777,
             #333
         );
-
 }
 
 /* ==============================
@@ -289,7 +257,6 @@ button.gray {
 ============================== */
 
 .create-card {
-
     display: flex;
 
     justify-content: center;
@@ -303,13 +270,10 @@ button.gray {
     border: 3px dashed #555;
 
     border-radius: 10px;
-
 }
 
 .create-card button {
-
     font-size: 18px;
-
 }
 
 /* ==============================
@@ -317,7 +281,6 @@ button.gray {
 ============================== */
 
 .modal {
-
     display: none;
 
     position: fixed;
@@ -333,11 +296,9 @@ button.gray {
     z-index: 1000;
 
     padding: 20px;
-
 }
 
 .modal-box {
-
     width: 100%;
 
     max-width: 500px;
@@ -353,29 +314,23 @@ button.gray {
     border-radius: 10px;
 
     padding: 25px;
-
 }
 
 .modal-box h2 {
-
     margin-top: 0;
 
     color: #55ff55;
-
 }
 
 .modal-box label {
-
     display: block;
 
     margin-top: 15px;
 
     margin-bottom: 5px;
-
 }
 
 .modal-box input {
-
     width: 100%;
 
     padding: 11px;
@@ -389,7 +344,6 @@ button.gray {
     color: white;
 
     border-radius: 6px;
-
 }
 
 /* ==============================
@@ -397,7 +351,6 @@ button.gray {
 ============================== */
 
 .image-preview {
-
     display: none;
 
     width: 160px;
@@ -411,7 +364,6 @@ button.gray {
     margin: 15px auto;
 
     border: 3px solid #555;
-
 }
 
 /* ==============================
@@ -419,13 +371,10 @@ button.gray {
 ============================== */
 
 #editor {
-
     display: none;
-
 }
 
 .editor-container {
-
     width: 95%;
 
     max-width: 1100px;
@@ -437,11 +386,9 @@ button.gray {
     border-radius: 12px;
 
     padding: 25px;
-
 }
 
 .editor-header {
-
     display: flex;
 
     align-items: center;
@@ -451,11 +398,9 @@ button.gray {
     flex-wrap: wrap;
 
     margin-bottom: 25px;
-
 }
 
 .editor-icon {
-
     width: 100px;
 
     height: 100px;
@@ -465,27 +410,20 @@ button.gray {
     image-rendering: pixelated;
 
     border: 3px solid #555;
-
 }
 
 .editor-title {
-
     flex: 1;
-
 }
 
 .editor-title h1 {
-
     margin: 0;
 
     color: #55ff55;
-
 }
 
 .editor-title p {
-
     color: #aaa;
-
 }
 
 /* ==============================
@@ -493,7 +431,6 @@ button.gray {
 ============================== */
 
 .panel {
-
     background: rgba(255,255,255,.05);
 
     border: 1px solid #444;
@@ -503,38 +440,30 @@ button.gray {
     border-radius: 8px;
 
     margin-bottom: 20px;
-
 }
 
 .panel h2 {
-
     margin-top: 0;
-
 }
 
 .config-grid {
-
     display: grid;
 
     grid-template-columns:
         repeat(auto-fit, minmax(220px, 1fr));
 
     gap: 15px;
-
 }
 
 .config-grid label {
-
     display: block;
 
     margin-bottom: 5px;
 
     color: #aaa;
-
 }
 
 .config-grid input {
-
     width: 100%;
 
     padding: 10px;
@@ -548,7 +477,6 @@ button.gray {
     border-radius: 5px;
 
     font-family: 'Minecraft', sans-serif;
-
 }
 
 /* ==============================
@@ -556,7 +484,6 @@ button.gray {
 ============================== */
 
 .sound-entry {
-
     background: rgba(0,0,0,.5);
 
     border: 2px solid #444;
@@ -566,11 +493,9 @@ button.gray {
     padding: 15px;
 
     margin-bottom: 12px;
-
 }
 
 .sound-top {
-
     display: flex;
 
     justify-content: space-between;
@@ -580,17 +505,13 @@ button.gray {
     gap: 10px;
 
     flex-wrap: wrap;
-
 }
 
 .sound-number {
-
     color: #55ff55;
-
 }
 
 .sound-grid {
-
     display: grid;
 
     grid-template-columns:
@@ -599,12 +520,10 @@ button.gray {
     gap: 10px;
 
     margin-top: 10px;
-
 }
 
 .sound-grid input,
 .sound-grid select {
-
     width: 100%;
 
     padding: 9px;
@@ -618,31 +537,24 @@ button.gray {
     border-radius: 5px;
 
     font-family: 'Minecraft', sans-serif;
-
 }
 
 .sound-id {
-
     margin-top: 10px;
 
     color: #aaa;
 
     font-size: 13px;
-
 }
 
 .sound-id strong {
-
     color: #55ff55;
-
 }
 
 audio {
-
     width: 100%;
 
     margin-top: 12px;
-
 }
 
 /* ==============================
@@ -650,13 +562,11 @@ audio {
 ============================== */
 
 .empty {
-
     text-align: center;
 
     color: #aaa;
 
     padding: 50px 20px;
-
 }
 
 /* ==============================
@@ -664,7 +574,6 @@ audio {
 ============================== */
 
 #toast {
-
     position: fixed;
 
     bottom: 25px;
@@ -686,7 +595,6 @@ audio {
     display: none;
 
     z-index: 5000;
-
 }
 
 /* ==============================
@@ -712,9 +620,7 @@ audio {
 </style>
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      PANTALLA DE PROYECTOS
@@ -730,7 +636,6 @@ alt="Custom PlaySound">
 
 </header>
 
-
 <div class="container">
 
 <h1 class="title">
@@ -741,7 +646,6 @@ alt="Custom PlaySound">
 Crea y administra tus Add-Ons de sonidos personalizados
 </p>
 
-
 <div
 id="projectGrid"
 class="project-grid">
@@ -751,7 +655,6 @@ class="project-grid">
 
 </div>
 
-
 <!-- =====================================================
      EDITOR
 ===================================================== -->
@@ -759,7 +662,6 @@ class="project-grid">
 <div id="editor">
 
 <div class="editor-container">
-
 
 <div class="editor-header">
 
@@ -791,7 +693,6 @@ onclick="backToProjects()">
 
 </div>
 
-
 <!-- CONFIGURACIÓN -->
 
 <div class="panel">
@@ -812,7 +713,6 @@ oninput="updateProject()"
 >
 
 </div>
-
 
 <div>
 
@@ -841,7 +741,6 @@ onclick="changeProjectImage()">
 
 </div>
 
-
 <!-- SONIDOS -->
 
 <div class="panel">
@@ -849,7 +748,6 @@ onclick="changeProjectImage()">
 <h2>🎵 Sonidos</h2>
 
 <div id="soundList"></div>
-
 
 <button
 onclick="addSound()">
@@ -859,7 +757,6 @@ onclick="addSound()">
 </button>
 
 </div>
-
 
 <!-- EXPORTAR -->
 
@@ -882,11 +779,9 @@ onclick="exportProject()">
 
 </div>
 
-
 </div>
 
 </div>
-
 
 <!-- =====================================================
      MODAL CREAR PROYECTO
@@ -902,7 +797,6 @@ class="modal">
 🆕 Nuevo proyecto
 </h2>
 
-
 <label>
 Nombre del proyecto
 </label>
@@ -912,7 +806,6 @@ id="newName"
 placeholder="Mi Sound Pack"
 >
 
-
 <label>
 Namespace
 </label>
@@ -921,7 +814,6 @@ Namespace
 id="newNamespace"
 placeholder="miaddon"
 >
-
 
 <label>
 Imagen del proyecto
@@ -934,12 +826,10 @@ accept="image/png,image/jpeg,image/webp"
 onchange="previewNewImage(event)"
 >
 
-
 <img
 id="newImagePreview"
 class="image-preview"
 >
-
 
 <div style="text-align:center;margin-top:20px;">
 
@@ -964,7 +854,6 @@ Cancelar
 
 </div>
 
-
 <!-- =====================================================
      MODAL CAMBIAR IMAGEN
 ===================================================== -->
@@ -984,7 +873,6 @@ id="changeImageInput"
 type="file"
 accept="image/png,image/jpeg,image/webp"
 >
-
 
 <div style="text-align:center;margin-top:20px;">
 
@@ -1009,11 +897,9 @@ Cancelar
 
 </div>
 
-
 <div id="toast">
 Guardado
 </div>
-
 
 <script>
 
@@ -1033,7 +919,6 @@ let db;
 
 let currentProjectId = null;
 
-
 /* =====================================================
    ABRIR DB
 ===================================================== */
@@ -1048,13 +933,11 @@ function openDB() {
                 DB_VERSION
             );
 
-
         request.onupgradeneeded =
         function(event) {
 
             const database =
                 event.target.result;
-
 
             if (!database.objectStoreNames.contains(STORE_NAME)) {
 
@@ -1069,7 +952,6 @@ function openDB() {
 
         };
 
-
         request.onsuccess =
         function(event) {
 
@@ -1079,7 +961,6 @@ function openDB() {
             resolve(db);
 
         };
-
 
         request.onerror =
         function() {
@@ -1093,7 +974,6 @@ function openDB() {
     });
 
 }
-
 
 /* =====================================================
    GUARDAR PROYECTO
@@ -1129,7 +1009,6 @@ function saveProject(project) {
     );
 
 }
-
 
 /* =====================================================
    OBTENER TODOS
@@ -1169,7 +1048,6 @@ function getProjects() {
 
 }
 
-
 /* =====================================================
    OBTENER UNO
 ===================================================== */
@@ -1208,7 +1086,6 @@ function getProject(id) {
 
 }
 
-
 /* =====================================================
    ELIMINAR
 ===================================================== */
@@ -1244,7 +1121,6 @@ function deleteProjectDB(id) {
 
 }
 
-
 /* =====================================================
    CREAR PROYECTO
 ===================================================== */
@@ -1257,14 +1133,12 @@ async function createProject() {
         .value
         .trim();
 
-
     const namespace =
         document
         .getElementById("newNamespace")
         .value
         .trim()
         .toLowerCase();
-
 
     if (!name) {
 
@@ -1276,7 +1150,6 @@ async function createProject() {
 
     }
 
-
     if (!namespace) {
 
         alert(
@@ -1287,14 +1160,11 @@ async function createProject() {
 
     }
 
-
     const imageInput =
         document
         .getElementById("newImage");
 
-
     let imageData = null;
-
 
     if (imageInput.files[0]) {
 
@@ -1305,45 +1175,35 @@ async function createProject() {
 
     }
 
-
     const project = {
 
         id:
             crypto.randomUUID(),
 
         name:
-
             name,
 
         namespace:
-
             namespace,
 
         packName:
-
             name,
 
         image:
-
             imageData,
 
         sounds:
-
             [],
 
         created:
-
             Date.now(),
 
         modified:
-
             Date.now()
 
     };
 
-
     await saveProject(project);
-
 
     closeCreateModal();
 
@@ -1354,7 +1214,6 @@ async function createProject() {
     openEditor(project.id);
 
 }
-
 
 /* =====================================================
    MOSTRAR PROYECTOS
@@ -1368,13 +1227,10 @@ async function showProjects() {
             "projectGrid"
         );
 
-
     grid.innerHTML = "";
-
 
     const projects =
         await getProjects();
-
 
     if (projects.length === 0) {
 
@@ -1397,7 +1253,6 @@ async function showProjects() {
 
     }
 
-
     projects
     .sort(
         (a,b) =>
@@ -1414,11 +1269,9 @@ async function showProjects() {
             card.className =
                 "project-card";
 
-
             const image =
                 project.image ||
                 "sonido.png";
-
 
             card.innerHTML = `
 
@@ -1473,19 +1326,16 @@ async function showProjects() {
 
             `;
 
-
             grid.appendChild(card);
 
         }
     );
-
 
     const createCard =
         document.createElement("div");
 
     createCard.className =
         "create-card";
-
 
     createCard.innerHTML = `
 
@@ -1498,13 +1348,11 @@ async function showProjects() {
 
     `;
 
-
     grid.appendChild(
         createCard
     );
 
 }
-
 
 /* =====================================================
    ABRIR EDITOR
@@ -1515,14 +1363,11 @@ async function openEditor(id) {
     const project =
         await getProject(id);
 
-
     if (!project)
         return;
 
-
     currentProjectId =
         id;
-
 
     document
     .getElementById(
@@ -1531,14 +1376,12 @@ async function openEditor(id) {
     .style.display =
         "none";
 
-
     document
     .getElementById(
         "editor"
     )
     .style.display =
         "block";
-
 
     document
     .getElementById(
@@ -1547,14 +1390,12 @@ async function openEditor(id) {
     .textContent =
         project.name;
 
-
     document
     .getElementById(
         "editorNamespace"
     )
     .textContent =
         project.namespace;
-
 
     document
     .getElementById(
@@ -1563,14 +1404,12 @@ async function openEditor(id) {
     .value =
         project.packName;
 
-
     document
     .getElementById(
         "namespace"
     )
     .value =
         project.namespace;
-
 
     document
     .getElementById(
@@ -1580,13 +1419,11 @@ async function openEditor(id) {
         project.image ||
         "sonido.png";
 
-
     renderSounds(
         project
     );
 
 }
-
 
 /* =====================================================
    VOLVER
@@ -1597,14 +1434,12 @@ async function backToProjects() {
     currentProjectId =
         null;
 
-
     document
     .getElementById(
         "editor"
     )
     .style.display =
         "none";
-
 
     document
     .getElementById(
@@ -1613,11 +1448,9 @@ async function backToProjects() {
     .style.display =
         "block";
 
-
     await showProjects();
 
 }
-
 
 /* =====================================================
    ACTUALIZAR PROYECTO
@@ -1630,10 +1463,8 @@ async function updateProject() {
             currentProjectId
         );
 
-
     if (!project)
         return;
-
 
     project.packName =
         document
@@ -1641,7 +1472,6 @@ async function updateProject() {
             "packName"
         )
         .value;
-
 
     project.namespace =
         document
@@ -1652,15 +1482,12 @@ async function updateProject() {
         .trim()
         .toLowerCase();
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
-
 
     document
     .getElementById(
@@ -1669,7 +1496,6 @@ async function updateProject() {
     .textContent =
         project.name;
 
-
     document
     .getElementById(
         "editorNamespace"
@@ -1677,13 +1503,11 @@ async function updateProject() {
     .textContent =
         project.namespace;
 
-
     renderSounds(
         project
     );
 
 }
-
 
 /* =====================================================
    AGREGAR SONIDO
@@ -1696,10 +1520,8 @@ async function addSound() {
             currentProjectId
         );
 
-
     if (!project)
         return;
-
 
     project.sounds.push({
 
@@ -1726,22 +1548,18 @@ async function addSound() {
 
     });
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
-
 
     renderSounds(
         project
     );
 
 }
-
 
 /* =====================================================
    RENDER SONIDOS
@@ -1755,9 +1573,7 @@ function renderSounds(project) {
             "soundList"
         );
 
-
     list.innerHTML = "";
-
 
     if (
         !project.sounds.length
@@ -1783,7 +1599,6 @@ function renderSounds(project) {
 
     }
 
-
     project.sounds.forEach(
         (sound,index) => {
 
@@ -1791,18 +1606,20 @@ function renderSounds(project) {
                 document
                 .createElement("div");
 
-
             entry.className =
                 "sound-entry";
 
+            /*
+             * IMPORTANTE:
+             * La ID del sonido es únicamente
+             * la que escribe el usuario.
+             *
+             * El namespace del proyecto
+             * NO se agrega aquí.
+             */
 
             const fullID =
-                project.namespace
-                ? project.namespace +
-                  "." +
-                  (sound.name || "sonido")
-                : "namespace.sonido";
-
+                sound.name || "sonido";
 
             entry.innerHTML = `
 
@@ -1824,7 +1641,6 @@ function renderSounds(project) {
 
             </div>
 
-
             <div class="sound-grid">
 
                 <div>
@@ -1838,7 +1654,6 @@ function renderSounds(project) {
 
                 </div>
 
-
                 <div>
 
                     <input
@@ -1849,7 +1664,6 @@ function renderSounds(project) {
                     >
 
                 </div>
-
 
                 <div>
 
@@ -1865,7 +1679,6 @@ function renderSounds(project) {
 
             </div>
 
-
             <div class="sound-id">
 
                 ID:
@@ -1876,13 +1689,11 @@ function renderSounds(project) {
 
             </div>
 
-
             <input
             type="file"
             accept=".ogg,audio/ogg"
             onchange="attachSoundFile('${sound.id}',this.files[0])"
             >
-
 
             ${
                 sound.fileData
@@ -1896,7 +1707,6 @@ function renderSounds(project) {
 
             `;
 
-
             list.appendChild(
                 entry
             );
@@ -1905,7 +1715,6 @@ function renderSounds(project) {
     );
 
 }
-
 
 /* =====================================================
    CATEGORÍAS
@@ -1933,7 +1742,6 @@ function categoryOptions(selected) {
 
     ];
 
-
     return categories
     .map(
         category => `
@@ -1954,7 +1762,6 @@ function categoryOptions(selected) {
 
 }
 
-
 /* =====================================================
    ACTUALIZAR SONIDO
 ===================================================== */
@@ -1970,36 +1777,29 @@ async function updateSoundField(
             currentProjectId
         );
 
-
     const sound =
         project.sounds.find(
             s => s.id === soundId
         );
 
-
     if (!sound)
         return;
-
 
     sound[field] =
         value;
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
-
 
     renderSounds(
         project
     );
 
 }
-
 
 /* =====================================================
    GUARDAR ARCHIVO OGG
@@ -2012,7 +1812,6 @@ async function attachSoundFile(
 
     if (!file)
         return;
-
 
     if (
         !file.name
@@ -2028,35 +1827,28 @@ async function attachSoundFile(
 
     }
 
-
     const project =
         await getProject(
             currentProjectId
         );
-
 
     const sound =
         project.sounds.find(
             s => s.id === soundId
         );
 
-
     if (!sound)
         return;
-
 
     sound.fileName =
         file.name;
 
-
     sound.fileData =
         await fileToDataURL(file);
-
 
     sound.mime =
         file.type ||
         "audio/ogg";
-
 
     if (!sound.path) {
 
@@ -2065,27 +1857,22 @@ async function attachSoundFile(
 
     }
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
 
-
     renderSounds(
         project
     );
-
 
     toast(
         "🎵 Sonido guardado"
     );
 
 }
-
 
 /* =====================================================
    ELIMINAR SONIDO
@@ -2102,34 +1889,28 @@ async function removeSound(
     )
         return;
 
-
     const project =
         await getProject(
             currentProjectId
         );
-
 
     project.sounds =
         project.sounds.filter(
             s => s.id !== soundId
         );
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
-
 
     renderSounds(
         project
     );
 
 }
-
 
 /* =====================================================
    IMAGEN DEL PROYECTO
@@ -2146,7 +1927,6 @@ function changeProjectImage() {
 
 }
 
-
 async function saveNewProjectImage() {
 
     const input =
@@ -2155,31 +1935,25 @@ async function saveNewProjectImage() {
             "changeImageInput"
         );
 
-
     if (!input.files[0])
         return;
-
 
     const project =
         await getProject(
             currentProjectId
         );
 
-
     project.image =
         await fileToDataURL(
             input.files[0]
         );
 
-
     project.modified =
         Date.now();
-
 
     await saveProject(
         project
     );
-
 
     document
     .getElementById(
@@ -2188,16 +1962,13 @@ async function saveNewProjectImage() {
     .src =
         project.image;
 
-
     closeImageModal();
-
 
     toast(
         "🖼️ Imagen actualizada"
     );
 
 }
-
 
 /* =====================================================
    ELIMINAR PROYECTO
@@ -2208,10 +1979,8 @@ async function removeProject(id) {
     const project =
         await getProject(id);
 
-
     if (!project)
         return;
-
 
     if (
         !confirm(
@@ -2220,21 +1989,17 @@ async function removeProject(id) {
     )
         return;
 
-
     await deleteProjectDB(
         id
     );
 
-
     await showProjects();
-
 
     toast(
         "🗑️ Proyecto eliminado"
     );
 
 }
-
 
 /* =====================================================
    EXPORTAR MCPACK
@@ -2247,10 +2012,8 @@ async function exportProject() {
             currentProjectId
         );
 
-
     if (!project)
         return;
-
 
     if (
         project.sounds.length === 0
@@ -2264,10 +2027,8 @@ async function exportProject() {
 
     }
 
-
     const zip =
         new JSZip();
-
 
     /* ==============================
        SOUNDS
@@ -2278,9 +2039,7 @@ async function exportProject() {
             "sounds"
         );
 
-
     const definitions = {};
-
 
     for (
         const sound of project.sounds
@@ -2299,7 +2058,6 @@ async function exportProject() {
 
         }
 
-
         if (!sound.fileData) {
 
             alert(
@@ -2310,12 +2068,10 @@ async function exportProject() {
 
         }
 
-
         const buffer =
             dataURLToArrayBuffer(
                 sound.fileData
             );
-
 
         const cleanPath =
             sound.path
@@ -2328,18 +2084,23 @@ async function exportProject() {
                 ""
             );
 
-
         soundsFolder.file(
             cleanPath + ".ogg",
             buffer
         );
 
+        /*
+         * IMPORTANTE:
+         * La clave del sonido en
+         * sound_definitions.json
+         * es EXACTAMENTE la ID escrita
+         * por el usuario.
+         *
+         * NO se agrega el namespace.
+         */
 
         const soundID =
-            project.namespace +
-            "." +
             sound.name;
-
 
         definitions[soundID] = {
 
@@ -2357,7 +2118,6 @@ async function exportProject() {
 
     }
 
-
     /* ==============================
        SOUND DEFINITIONS
     ============================== */
@@ -2374,7 +2134,6 @@ async function exportProject() {
 
     );
 
-
     /* ==============================
        MANIFEST
     ============================== */
@@ -2382,10 +2141,8 @@ async function exportProject() {
     const headerUUID =
         crypto.randomUUID();
 
-
     const moduleUUID =
         crypto.randomUUID();
-
 
     const manifest = {
 
@@ -2433,7 +2190,6 @@ async function exportProject() {
 
     };
 
-
     zip.file(
 
         "manifest.json",
@@ -2446,7 +2202,6 @@ async function exportProject() {
 
     );
 
-
     /* ==============================
        ICON
     ============================== */
@@ -2458,14 +2213,12 @@ async function exportProject() {
                 project.image
             );
 
-
         zip.file(
             "pack_icon.png",
             iconBuffer
         );
 
     }
-
 
     /* ==============================
        GENERAR
@@ -2488,22 +2241,18 @@ async function exportProject() {
 
         });
 
-
     const url =
         URL.createObjectURL(
             blob
         );
-
 
     const a =
         document.createElement(
             "a"
         );
 
-
     a.href =
         url;
-
 
     a.download =
         sanitizeFileName(
@@ -2511,17 +2260,13 @@ async function exportProject() {
         ) +
         ".mcpack";
 
-
     document
     .body
     .appendChild(a);
 
-
     a.click();
 
-
     a.remove();
-
 
     setTimeout(
         () =>
@@ -2529,13 +2274,11 @@ async function exportProject() {
         1000
     );
 
-
     toast(
         "📦 ¡MCPACK generado!"
     );
 
 }
-
 
 /* =====================================================
    MODALES
@@ -2552,7 +2295,6 @@ function openCreateModal() {
 
 }
 
-
 function closeCreateModal() {
 
     document
@@ -2563,7 +2305,6 @@ function closeCreateModal() {
         "none";
 
 }
-
 
 function closeImageModal() {
 
@@ -2576,7 +2317,6 @@ function closeImageModal() {
 
 }
 
-
 function clearCreateForm() {
 
     document
@@ -2585,20 +2325,17 @@ function clearCreateForm() {
     )
     .value = "";
 
-
     document
     .getElementById(
         "newNamespace"
     )
     .value = "";
 
-
     document
     .getElementById(
         "newImage"
     )
     .value = "";
-
 
     document
     .getElementById(
@@ -2609,7 +2346,6 @@ function clearCreateForm() {
 
 }
 
-
 /* =====================================================
    PREVIEW
 ===================================================== */
@@ -2619,10 +2355,8 @@ function previewNewImage(event) {
     const file =
         event.target.files[0];
 
-
     if (!file)
         return;
-
 
     const preview =
         document
@@ -2630,18 +2364,15 @@ function previewNewImage(event) {
             "newImagePreview"
         );
 
-
     preview.src =
         URL.createObjectURL(
             file
         );
 
-
     preview.style.display =
         "block";
 
 }
-
 
 /* =====================================================
    UTILIDADES
@@ -2655,17 +2386,14 @@ function fileToDataURL(file) {
             const reader =
                 new FileReader();
 
-
             reader.onload =
                 () =>
                 resolve(
                     reader.result
                 );
 
-
             reader.onerror =
                 reject;
-
 
             reader.readAsDataURL(
                 file
@@ -2676,7 +2404,6 @@ function fileToDataURL(file) {
 
 }
 
-
 function dataURLToArrayBuffer(
     dataURL
 ) {
@@ -2684,16 +2411,13 @@ function dataURLToArrayBuffer(
     const base64 =
         dataURL.split(",")[1];
 
-
     const binary =
         atob(base64);
-
 
     const bytes =
         new Uint8Array(
             binary.length
         );
-
 
     for (
         let i = 0;
@@ -2706,11 +2430,9 @@ function dataURLToArrayBuffer(
 
     }
 
-
     return bytes.buffer;
 
 }
-
 
 function sanitizeFileName(name) {
 
@@ -2726,7 +2448,6 @@ function sanitizeFileName(name) {
         .toLowerCase();
 
 }
-
 
 function escapeHTML(text) {
 
@@ -2756,13 +2477,11 @@ function escapeHTML(text) {
 
 }
 
-
 /* =====================================================
    TOAST
 ===================================================== */
 
 let toastTimer;
-
 
 function toast(message) {
 
@@ -2772,19 +2491,15 @@ function toast(message) {
             "toast"
         );
 
-
     element.textContent =
         message;
-
 
     element.style.display =
         "block";
 
-
     clearTimeout(
         toastTimer
     );
-
 
     toastTimer =
         setTimeout(
@@ -2798,7 +2513,6 @@ function toast(message) {
         );
 
 }
-
 
 /* =====================================================
    INICIO
@@ -2827,10 +2541,10 @@ async function init() {
 
 }
 
-
 init();
 
 </script>
 
 </body>
 </html>
+
