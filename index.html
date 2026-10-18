@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Página Principal</title>
-  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Edtra Studios</title>
+
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       text-align: center;
       font-family: 'Minecraft', sans-serif;
@@ -13,77 +20,173 @@
       background-size: cover;
       color: white;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+      pointer-events: none;
     }
 
     h1 {
-      margin-top: 20px;
+      margin: 35px 0 10px;
     }
+
+    .logo {
+      width: min(320px, 90%);
+      height: auto;
+    }
+
+    .subtitle {
+      color: #ddd;
+      font-size: 13px;
+      margin: 15px 0 35px;
+    }
+
+    /* TARJETAS CON IMÁGENES */
 
     .container {
-      margin-top: 50px;
+      width: 100%;
+      max-width: 950px;
+      margin: 35px auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 25px;
     }
 
-    button {
-      padding: 15px 40px;
-      margin: 15px;
-      font-size: 20px;
-      cursor: pointer;
-      border: 3px solid #550000;
-      border-radius: 8px;
-      font-family: 'Minecraft', sans-serif;
+    .image-button {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      min-height: 300px;
+      padding: 25px;
+      overflow: hidden;
+      isolation: isolate;
+
+      background-color: #171717;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      border: 3px solid #555;
+      border-radius: 12px;
+      box-shadow: 0 7px 0 rgba(0, 0, 0, 0.65);
+
       color: white;
-      background: linear-gradient(to bottom, #ff5555, #aa0000);
-      box-shadow: 0px 4px 0px #550000;
-      transition: 0.2s ease-in-out;
+      text-decoration: none;
+      transition: transform 0.25s, border-color 0.25s;
     }
 
-    button:hover {
-      background: linear-gradient(to bottom, #ff7777, #cc0000);
-      transform: scale(1.05);
+    /* Oscurece la parte inferior para leer el texto */
+
+    .image-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.05) 15%,
+        rgba(0, 0, 0, 0.25) 45%,
+        rgba(0, 0, 0, 0.95) 100%
+      );
+      transition: background 0.25s;
     }
 
-    button:active {
+    .image-button:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: #ff5555;
+    }
+
+    .image-button:hover::before {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.8)
+      );
+    }
+
+    .image-button:active {
+      transform: translateY(2px);
       box-shadow: none;
-      transform: translateY(3px);
     }
 
-    /* Menú hamburguesa (igual al de addons.html) */
+    .card-content {
+      width: 100%;
+      text-align: left;
+    }
+
+    .card-content h2 {
+      font-size: clamp(17px, 2.5vw, 25px);
+      margin: 0 0 12px;
+      text-shadow: 2px 3px 4px black;
+    }
+
+    .card-content p {
+      color: #ddd;
+      font-size: 11px;
+      line-height: 1.8;
+      margin: 0 0 18px;
+      text-shadow: 1px 2px 3px black;
+    }
+
+    .card-label {
+      display: inline-block;
+      padding: 10px 14px;
+      border: 2px solid #ff5555;
+      border-radius: 5px;
+      background: rgba(100, 0, 0, 0.8);
+      font-size: 11px;
+      box-shadow: 0 3px 0 #550000;
+    }
+
+    /* MENÚ HAMBURGUESA */
+
     .menu-toggle {
       position: fixed;
-      top: 10px;
-      left: 10px;
+      top: 15px;
+      left: 15px;
       cursor: pointer;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 8px;
+      z-index: 101;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 8px 10px;
+      border: 2px solid #555;
       border-radius: 6px;
     }
 
     .menu-toggle div {
-      width: 30px;
+      width: 27px;
       height: 4px;
       background-color: white;
       margin: 5px 0;
+      border-radius: 2px;
     }
 
     .menu {
       display: none;
       position: fixed;
-      top: 50px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.9);
+      top: 65px;
+      left: 15px;
+      z-index: 100;
+      min-width: 190px;
+      background: rgba(0, 0, 0, 0.96);
       padding: 10px;
+      border: 2px solid #555;
       border-radius: 8px;
       text-align: left;
-      font-family: 'Minecraft', sans-serif;
     }
 
     .menu a {
       display: block;
       margin: 8px 0;
-      padding: 8px 12px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 12px;
       background: #222;
       border: 2px solid #555;
       border-radius: 5px;
@@ -92,47 +195,149 @@
     }
 
     .menu a:hover {
-      background: #444;
+      background: #550000;
+      border-color: #ff5555;
     }
 
     .watermark {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      font-size: 14px;
-      opacity: 0.6;
-      font-family: 'Minecraft', sans-serif;
+      margin: 45px 0 10px;
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      h1 {
+        margin-top: 65px;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        gap: 20px;
+      }
+
+      .image-button {
+        min-height: 260px;
+      }
+
+      .subtitle {
+        font-size: 11px;
+        line-height: 1.8;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Menú Hamburguesa (como en addons.html) -->
-  <div class="menu-toggle" onclick="toggleMenu()">
+  <!-- MENÚ -->
+
+  <div
+    class="menu-toggle"
+    onclick="toggleMenu()"
+    aria-label="Abrir menú"
+    aria-expanded="false"
+    role="button"
+    tabindex="0"
+    onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleMenu(); }"
+  >
     <div></div>
     <div></div>
     <div></div>
   </div>
 
-  <!-- Menú desplegable -->
-  <div class="menu" id="menu">
+  <nav class="menu" id="menu">
     <a href="index.html">Volver al Inicio</a>
     <a href="edtra-maker.html">Edtra Maker</a>
-  </div>
+  </nav>
 
-  <h1><img src="title.png" alt="Edtra pagine" width="300" /></h1>
-  <div class="container">
-    <button onclick="location.href='sociales.html'">Social Network</button>
-    <button onclick="location.href='addons.html'">Addons</button>
-  </div>
+  <!-- LOGO -->
 
-  <div class="watermark">© Edtra Studios 2025</div>
+  <h1>
+    <img
+      src="title.png"
+      alt="Edtra Studios"
+      class="logo"
+    >
+  </h1>
+
+  <p class="subtitle">
+    EXPLORA EL UNIVERSO DE EDTRA STUDIOS
+  </p>
+
+  <!-- TARJETAS -->
+
+  <main class="container">
+
+    <a
+      class="image-button"
+      href="sociales.html"
+      style="background-image: url('sociales.png');"
+    >
+      <div class="card-content">
+        <h2>Social Network</h2>
+
+        <p>
+          Conecta con la comunidad y descubre
+          las novedades de Edtra Studios.
+        </p>
+
+        <span class="card-label">
+          EXPLORAR →
+        </span>
+      </div>
+    </a>
+
+    <a
+      class="image-button"
+      href="addons.html"
+      style="background-image: url('addons.png');"
+    >
+      <div class="card-content">
+        <h2>Addons</h2>
+
+        <p>
+          Descubre complementos, aventuras
+          y contenido para Minecraft.
+        </p>
+
+        <span class="card-label">
+          VER ADDONS →
+        </span>
+      </div>
+    </a>
+
+  </main>
+
+  <footer class="watermark">
+    © Edtra Studios 2026
+  </footer>
 
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      const menu = document.getElementById('menu');
+      const toggle = document.querySelector('.menu-toggle');
+
+      const isOpen = menu.style.display === 'block';
+
+      menu.style.display = isOpen ? 'none' : 'block';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
     }
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('menu');
+      const toggle = document.querySelector('.menu-toggle');
+
+      if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+        menu.style.display = 'none';
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>
+
 </body>
 </html>
