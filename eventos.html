@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Eventos | Edtra Studios</title>
+
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      text-align: center;
+      font-family: 'Minecraft', sans-serif;
+      background: url('fondo.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin: 35px 0 10px;
+    }
+
+    .logo {
+      width: min(320px, 90%);
+      height: auto;
+    }
+
+    .subtitle {
+      color: #ddd;
+      font-size: 12px;
+      line-height: 1.8;
+      margin: 15px 0 30px;
+    }
+
+    /* PRESENTACIÓN */
+
+    .intro {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto 30px;
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 2px solid #555;
+      border-radius: 10px;
+    }
+
+    .intro h2 {
+      color: #ff5555;
+      font-size: clamp(16px, 3vw, 22px);
+      margin: 0 0 15px;
+    }
+
+    .intro p {
+      color: #ddd;
+      font-size: 11px;
+      line-height: 2;
+      margin: 0;
+    }
+
+    /* TARJETAS DE EVENTOS */
+
+    .container {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 25px;
+    }
+
+    .event-card {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      min-height: 330px;
+      padding: 22px;
+      overflow: hidden;
+      isolation: isolate;
+
+      background-color: #171717;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      border: 3px solid #555;
+      border-radius: 12px;
+      box-shadow: 0 7px 0 rgba(0, 0, 0, 0.65);
+
+      color: white;
+      text-decoration: none;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+
+    .event-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.05) 5%,
+        rgba(0, 0, 0, 0.35) 35%,
+        rgba(0, 0, 0, 0.96) 100%
+      );
+      transition: background 0.25s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: #ff5555;
+    }
+
+    .event-card:hover::before {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.9)
+      );
+    }
+
+    .event-card:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .card-content {
+      width: 100%;
+      text-align: left;
+    }
+
+    .event-status {
+      display: inline-block;
+      padding: 8px 10px;
+      margin-bottom: 13px;
+      border: 2px solid #ff5555;
+      border-radius: 5px;
+      background: rgba(100, 0, 0, 0.85);
+      font-size: 9px;
+    }
+
+    .card-content h2 {
+      font-size: clamp(16px, 2.5vw, 23px);
+      line-height: 1.6;
+      margin: 0 0 12px;
+      text-shadow: 2px 3px 4px black;
+    }
+
+    .card-content p {
+      color: #ddd;
+      font-size: 10px;
+      line-height: 1.9;
+      margin: 0 0 17px;
+      text-shadow: 1px 2px 3px black;
+    }
+
+    .card-label {
+      display: inline-block;
+      padding: 10px 12px;
+      border: 2px solid #ff5555;
+      border-radius: 5px;
+      background: rgba(100, 0, 0, 0.8);
+      font-size: 10px;
+      box-shadow: 0 3px 0 #550000;
+    }
+
+    /* SECCIÓN FINAL */
+
+    .more-events {
+      max-width: 950px;
+      margin: 30px auto 0;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 2px solid #555;
+      border-radius: 10px;
+    }
+
+    .more-events h2 {
+      font-size: 15px;
+      color: #ff5555;
+      margin: 0 0 12px;
+    }
+
+    .more-events p {
+      color: #ddd;
+      font-size: 10px;
+      line-height: 2;
+      margin: 0;
+    }
+
+    /* MENÚ HAMBURGUESA */
+
+    .menu-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      cursor: pointer;
+      z-index: 101;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 8px 10px;
+      border: 2px solid #555;
+      border-radius: 6px;
+    }
+
+    .menu-toggle div {
+      width: 27px;
+      height: 4px;
+      background-color: white;
+      margin: 5px 0;
+      border-radius: 2px;
+    }
+
+    .menu {
+      display: none;
+      position: fixed;
+      top: 65px;
+      left: 15px;
+      z-index: 100;
+      min-width: 190px;
+      background: rgba(0, 0, 0, 0.96);
+      padding: 10px;
+      border: 2px solid #555;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .menu a {
+      display: block;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 11px;
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 5px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .menu a:hover {
+      background: #550000;
+      border-color: #ff5555;
+    }
+
+    .watermark {
+      margin: 45px 0 10px;
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      h1 {
+        margin-top: 65px;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        gap: 20px;
+      }
+
+      .event-card {
+        min-height: 290px;
+      }
+
+      .subtitle {
+        font-size: 10px;
+      }
+
+      .intro {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MENÚ -->
+
+  <div
+    class="menu-toggle"
+    onclick="toggleMenu()"
+    aria-label="Abrir menú"
+    aria-expanded="false"
+    role="button"
+    tabindex="0"
+    onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleMenu(); }"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav class="menu" id="menu">
+    <a href="index.html">Volver al Inicio</a>
+    <a href="edtra-maker.html">Edtra Maker</a>
+  </nav>
+
+  <!-- ENCABEZADO -->
+
+  <h1>
+    <img
+      src="event.png"
+      alt="Edtra Studio"
+      class="logo"
+    >
+  </h1>
+
+  <p class="subtitle">
+    EL HISTORIAL DE NUESTRAS AVENTURAS
+  </p>
+
+  <!-- INTRODUCCIÓN -->
+
+  <section class="intro">
+    <h2>EVENTOS DE EDTRA STUDIOS</h2>
+
+    <p>
+      Cada evento tiene su propia historia.
+      Descubre los desafíos, las series y las aventuras
+      que forman parte del universo de Edtra Studio.
+    </p>
+  </section>
+
+  <!-- TARJETAS -->
+
+  <main class="container">
+
+    <!-- CRAFTING EXTREMO -->
+
+    <article
+      class="event-card"
+      style="background-image: url('crafting-extremo.png');"
+    >
+      <div class="card-content">
+
+        <span class="event-status">
+          SERIE
+        </span>
+
+        <h2>CRAFTING EXTREMO</h2>
+
+        <p>
+          Una aventura de Minecraft llena de desafíos,
+          supervivencia y momentos extremos.
+          ¿Recuerdas todo lo que pasó en esta aventura?
+        </p>
+
+        <span class="card-label">
+          CRAFTING EXTREMO
+        </span>
+
+      </div>
+    </article>
+
+    <!-- EDTRA HARDCORE -->
+
+    <article
+      class="event-card"
+      style="background-image: url('hardcore.png');"
+    >
+      <div class="card-content">
+
+        <span class="event-status">
+          SERIE
+        </span>
+
+        <h2> HARDCORE SMP </h2>
+
+        <p>
+          Sobrevive a una aventura hardcore de una vida 
+          Donde cada momento es crucial para sobrevivir.
+          ¿Estas dispuesto a sobrevivir?
+ 
+        </p>
+
+        <span class="card-label">
+          UNA VIDA
+        </span>
+
+      </div>
+    </article>
+
+  </main>
+
+  <!-- FINAL -->
+
+  <section class="more-events">
+    <h2>¿MÁS AVENTURAS?</h2>
+
+    <p>
+      Este es el registro de nuestros eventos.
+      <br>
+      ¡Aquí iremos agregando más aventuras de Edtra Studio!
+    </p>
+  </section>
+
+  <footer class="watermark">
+    © Edtra Studios 2026
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const toggle = document.querySelector('.menu-toggle');
+
+      const isOpen = menu.style.display === 'block';
+
+      menu.style.display = isOpen ? 'none' : 'block';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('menu');
+      const toggle = document.querySelector('.menu-toggle');
+
+      if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+        menu.style.display = 'none';
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  </script>
+
+</body>
+</html>
