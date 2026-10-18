@@ -3,208 +3,372 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Addons</title>
+  <title>Edtra Studios | Addons</title>
+
   <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
+      padding: 0;
       text-align: center;
       font-family: 'Minecraft', sans-serif;
       background: url('fondo.png') no-repeat center center fixed;
       background-size: cover;
+      background-color: #111;
       color: white;
-      margin: 0;
-      padding: 0;
     }
 
-    h1 {
-      margin-top: 20px;
+    /* Capa oscura para mejorar la lectura */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: -1;
     }
 
-    .container {
-      margin-top: 50px;
+    .header {
+      padding: 35px 15px 10px;
     }
 
-    .addon-block {
-      margin-bottom: 40px;
-    }
-
-    a {
-      display: block;
-      margin: auto;
-      padding: 0;
+    .header img {
       width: 300px;
-      text-decoration: none;
-      font-family: 'Minecraft', sans-serif;
-      color: white;
-      border: 3px solid #774400;
-      border-radius: 8px;
-      background: linear-gradient(to bottom, #ffaa00, #cc5500);
-      box-shadow: 0px 4px 0px #774400;
-      transition: 0.2s ease-in-out;
+      max-width: 85%;
+      height: auto;
+      filter: drop-shadow(0 5px 8px rgba(0,0,0,0.8));
+    }
+
+    .subtitle {
+      font-size: 13px;
+      margin-top: 15px;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    /* Cuadrícula de tarjetas */
+    .container {
+      width: min(1100px, 92%);
+      margin: 35px auto 80px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 25px;
+    }
+
+    /* Tarjetas con imagen de fondo */
+    .addon-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 240px;
       overflow: hidden;
+      border: 3px solid #774400;
+      border-radius: 12px;
+      background-color: #222;
+      background-size: cover;
+      background-position: center;
+      text-decoration: none;
+      color: white;
+      box-shadow: 0 6px 0 #492900;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+      isolation: isolate;
     }
 
-    a:hover {
-      background: linear-gradient(to bottom, #ffcc44, #dd6600);
-      transform: scale(1.05);
+    .addon-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.55) 48%,
+        rgba(0, 0, 0, 0.05) 100%
+      );
+      transition: background 0.25s ease;
     }
 
-    a:active {
+    .addon-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #ffbb33;
+      box-shadow: 0 10px 0 #492900,
+                  0 0 20px rgba(255, 170, 0, 0.35);
+    }
+
+    .addon-card:hover::before {
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.98),
+        rgba(0, 0, 0, 0.35)
+      );
+    }
+
+    .addon-card:active {
+      transform: translateY(3px) scale(0.99);
       box-shadow: none;
-      transform: translateY(3px);
     }
 
-    .addon-banner {
-      width: 100%;
+    .addon-content {
+      padding: 22px 15px 18px;
+      text-align: left;
+    }
+
+    .addon-title {
       display: block;
+      font-size: 17px;
+      line-height: 1.6;
+      text-shadow: 2px 2px 3px black;
     }
 
-    .addon-label {
-      padding: 15px 0;
-      font-size: 20px;
+    .addon-description {
+      display: block;
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.7;
+      color: #ddd;
     }
 
-    /* Botón hamburguesa */
+    .addon-action {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 12px;
+      border: 2px solid #ffb52e;
+      border-radius: 5px;
+      background: linear-gradient(to bottom, #ff9900, #c94e00);
+      color: white;
+      font-size: 11px;
+      box-shadow: 0 3px 0 #713000;
+    }
+
+    .addon-card:hover .addon-action {
+      background: linear-gradient(to bottom, #ffcc44, #e66a00);
+    }
+
+    /* Menú hamburguesa */
     .menu-toggle {
       position: fixed;
-      top: 10px;
-      left: 10px;
+      top: 12px;
+      left: 12px;
       cursor: pointer;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 8px;
-      border-radius: 6px;
+      z-index: 101;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 9px;
+      border: 2px solid #777;
+      border-radius: 7px;
     }
 
     .menu-toggle div {
-      width: 30px;
+      width: 27px;
       height: 4px;
-      background-color: white;
+      background: white;
       margin: 5px 0;
+      border-radius: 2px;
     }
 
     .menu {
       display: none;
       position: fixed;
-      top: 50px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.9);
+      top: 65px;
+      left: 12px;
+      width: 220px;
       padding: 10px;
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #555;
       border-radius: 8px;
+      z-index: 100;
       text-align: left;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.6);
     }
 
     .menu a {
       display: block;
-      margin: 8px 0;
-      width: auto;
-      padding: 8px 12px;
-      font-size: 16px;
-      background: #222;
+      padding: 12px;
+      margin: 5px 0;
       border: 2px solid #555;
       border-radius: 5px;
-      text-align: left;
+      background: #222;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      transition: 0.2s;
     }
 
     .menu a:hover {
-      background: #444;
+      background: #8a280e;
+      border-color: #ff8844;
     }
-.watermark {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            font-size: 14px;
-            opacity: 0.6;
-            font-family: 'Minecraft', sans-serif;
-        }
+
+    .watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 10px;
+      opacity: 0.7;
+      text-shadow: 2px 2px 3px black;
+      pointer-events: none;
+    }
+
+    /* Móviles */
+    @media (max-width: 650px) {
+      .container {
+        grid-template-columns: 1fr;
+        width: 90%;
+        gap: 20px;
+      }
+
+      .addon-card {
+        min-height: 220px;
+      }
+
+      .addon-title {
+        font-size: 15px;
+      }
+
+      .header {
+        padding-top: 55px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- Botón Hamburguesa -->
+  <!-- Menú hamburguesa -->
   <div class="menu-toggle" onclick="toggleMenu()">
     <div></div>
     <div></div>
     <div></div>
   </div>
 
+  <nav class="menu" id="menu">
+    <a href="index.html">🏠 Volver al inicio</a>
+    <a href="sociales.html">🌐 Social Network</a>
+    <a href="edtra-maker.html">⚒ Edtra Maker</a>
+  </nav>
 
-  <!-- Menú de Navegación -->
-  <div class="menu" id="menu">
-    <a href="index.html"> Volver al Inicio</a>
-    <a href="edtra-maker.html">️ Edtra Maker</a>
-  </div>
+  <!-- Encabezado -->
+  <header class="header">
+    <img src="addons.png" alt="Addons">
+    <p class="subtitle">DESCUBRE LOS ADDONS DE EDTRA STUDIOS</p>
+  </header>
 
+  <!-- Addons -->
+  <main class="container">
 
-  <h1><img src="addons.png" alt="Addons" width="300"></h1>
-  <div class="container">
+    <a class="addon-card"
+       href="https://www.curseforge.com/minecraft-bedrock/addons/three-lives-hardcore"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('hardcore.png');">
+      <span class="addon-content">
+        <span class="addon-title">❤️ Three Lives Hardcore</span>
+        <span class="addon-description">Un desafío hardcore con tres vidas.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://www.curseforge.com/minecraft-bedrock/addons/three-lives-hardcore" target="_blank">
-        <img src="hardcore.png" class="addon-banner" alt="Hardcore">
-        <div class="addon-label">❤ Three lives Hardcore</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://mcpedl.com/customs-missions-v3/"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('missions.png');">
+      <span class="addon-content">
+        <span class="addon-title">📜 Customs Missions v3</span>
+        <span class="addon-description">Añade misiones a tu experiencia de Minecraft.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://mcpedl.com/customs-missions-v3/" target="_blank">
-        <img src="missions.png" class="addon-banner" alt="Missions">
-        <div class="addon-label">📜 Customs Missions v3</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://mcpedl.com/the-cursed-apple/"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('cursed apple.png');">
+      <span class="addon-content">
+        <span class="addon-title">👁 The Cursed Apple</span>
+        <span class="addon-description">Descubre el misterio de la manzana maldita.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://mcpedl.com/the-cursed-apple/" target="_blank">
-        <img src="cursed apple.png" class="addon-banner" alt="Cursed Apple">
-        <div class="addon-label">👁 The cursed apple</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://mcpedl.com/edtra-timer-v1/"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('timer.png');">
+      <span class="addon-content">
+        <span class="addon-title">🕑 Edtra Timer v1</span>
+        <span class="addon-description">Un temporizador para tus mundos de Minecraft.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://mcpedl.com/edtra-timer-v1/" target="_blank">
-        <img src="timer.png" class="addon-banner" alt="Timer">
-        <div class="addon-label">🕑 Edtra timer v1</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://mcpedl.com/tnt-tag/"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('tnt tag.png');">
+      <span class="addon-content">
+        <span class="addon-title">🧨 TNT Tag</span>
+        <span class="addon-description">Corre antes de que la TNT explote.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://mcpedl.com/tnt-tag/" target="_blank">
-        <img src="tnt tag.png" class="addon-banner" alt="TNT Tag">
-        <div class="addon-label">🧨 Tnt Tag</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://mcpedl.com/chat-blocker/"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('chat.png');">
+      <span class="addon-content">
+        <span class="addon-title">🔒 Chat Blocker v2.0</span>
+        <span class="addon-description">Un addon para controlar el chat.</span>
+        <span class="addon-action">VER ADDON →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://mcpedl.com/chat-blocker/" target="_blank">
-        <img src="chat.png" class="addon-banner" alt="Chat blocker v2.0">
-        <div class="addon-label">🔒 Chat Blocker v2.0</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://www.mediafire.com/file/icgkmeu47rhnirj/Death_Locate.mcaddon.zip/file"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('death locate.png');">
+      <span class="addon-content">
+        <span class="addon-title">💀 Death Locate</span>
+        <span class="addon-description">Encuentra dónde moriste en tu mundo.</span>
+        <span class="addon-action">DESCARGAR →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://www.mediafire.com/file/icgkmeu47rhnirj/Death_Locate.mcaddon.zip/file" target="_blank">
-        <img src="death locate.png" class="addon-banner" alt="Death Locate">
-        <div class="addon-label">💀 Death Locate</div>
-      </a>
-    </div>
+    <a class="addon-card"
+       href="https://www.mediafire.com/file/l2merl05zwr8vly/Difficulty.mcaddon/file"
+       target="_blank" rel="noopener noreferrer"
+       style="background-image: url('difficulty.png');">
+      <span class="addon-content">
+        <span class="addon-title">🩹 Difficulty</span>
+        <span class="addon-description">Personaliza la dificultad de tu aventura.</span>
+        <span class="addon-action">DESCARGAR →</span>
+      </span>
+    </a>
 
-    <div class="addon-block">
-      <a href="https://www.mediafire.com/file/l2merl05zwr8vly/Difficulty.mcaddon/file" target="_blank">
-        <img src="difficulty.png" class="addon-banner" alt="Difficulty">
-        <div class="addon-label">🩹 Difficulty</div>
-      </a>
-    </div>
+  </main>
 
-    <div class="watermark">© Edtra Studios 2025</div>
-
-
-  </div>
+  <div class="watermark">© Edtra Studios 2026</div>
 
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      const menu = document.getElementById('menu');
+
+      menu.style.display =
+        menu.style.display === 'block' ? 'none' : 'block';
     }
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('menu');
+      const toggle = document.querySelector('.menu-toggle');
+
+      if (!menu.contains(event.target) &&
+          !toggle.contains(event.target)) {
+        menu.style.display = 'none';
+      }
+    });
   </script>
+
 </body>
 </html>
