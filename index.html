@@ -59,30 +59,38 @@
       gap: 25px;
     }
 
+.image-button {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    min-height: 300px;
+    padding: 25px;
+    overflow: hidden;
+    isolation: isolate;
+
+    background-color: #171717;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    border: 3px solid #555;
+    border-radius: 12px;
+    box-shadow: 0 7px 0 rgba(0, 0, 0, 0.65);
+
+    color: white;
+    text-decoration: none;
+    transition: transform 0.25s, border-color 0.25s;
+}
+
+@media (max-width: 600px) {
     .image-button {
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      min-height: 300px;
-      padding: 25px;
-      overflow: hidden;
-      isolation: isolate;
-
-      background-color: #171717;
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-
-      border: 3px solid #555;
-      border-radius: 12px;
-      box-shadow: 0 7px 0 rgba(0, 0, 0, 0.65);
-
-      color: white;
-      text-decoration: none;
-      transition: transform 0.25s, border-color 0.25s;
+        min-height: 260px;
+        background-position: center center;
+        background-size: cover;
     }
-
+}
     /* Oscurece la parte inferior para leer el texto */
 
     .image-button::before {
