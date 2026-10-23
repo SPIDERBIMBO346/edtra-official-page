@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edtra Head</title>
+
+<link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+:root {
+    --red: #e53935;
+    --dark: #151515;
+    --panel: #222;
+    --border: #393939;
+    --text: #fff;
+    --muted: #aaa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: 'Minecraft', sans-serif;
+    background:
+        linear-gradient(#080808d9, #080808ed),
+        url('fondo.png') center / cover fixed;
+    font-size: 12px;
+}
+
+button, input, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 5px;
+    padding: 12px 14px;
+    color: white;
+    background: var(--red);
+    transition: .2s;
+}
+
+button:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondary {
+    background: #393939;
+}
+
+.danger {
+    background: #8e2222;
+}
+
+header {
+    padding: 18px 14px;
+    text-align: center;
+    background: #111e;
+    border-bottom: 2px solid var(--red);
+}
+
+header img {
+    display: block;
+    max-width: 230px;
+    max-height: 100px;
+    object-fit: contain;
+    margin: 0 auto 12px;
+}
+
+header h1 {
+    font-size: clamp(16px, 4vw, 25px);
+    margin: 8px 0;
+}
+
+header p {
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+main {
+    width: min(1050px, 94%);
+    margin: 24px auto;
+}
+
+.panel {
+    background: #181818f5;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+h2 {
+    font-size: 15px;
+    margin: 0 0 15px;
+}
+
+h3 {
+    font-size: 12px;
+}
+
+.muted {
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 10px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.row > button {
+    flex-shrink: 0;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    color: white;
+    background: #101010;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 12px;
+    outline: none;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--red);
+}
+
+label {
+    display: block;
+    color: #ddd;
+    font-size: 10px;
+    margin-bottom: 8px;
+}
+
+.field {
+    margin-bottom: 15px;
+    flex: 1;
+    min-width: 180px;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    color: #ccc;
+    font-size: 10px;
+    margin-top: 8px;
+}
+
+#projectsGrid, #playersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.project-card, .player-card {
+    background: #242424;
+    border: 1px solid #3b3b3b;
+    border-radius: 8px;
+    padding: 13px;
+    min-width: 0;
+}
+
+.project-cover {
+    width: 100%;
+    height: 125px;
+    background: #111;
+    border-radius: 5px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+.project-card h3 {
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.project-card .muted {
+    margin-bottom: 12px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 10px 6px;
+    font-size: 10px;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px 12px;
+    color: #aaa;
+    line-height: 2;
+}
+
+#editor {
+    display: none;
+}
+
+#dashboard {
+    display: block;
+}
+
+#projectPreview {
+    width: 100%;
+    max-height: 170px;
+    object-fit: contain;
+    background: #101010;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.player-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.head-preview {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    object-fit: contain;
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.player-card input[type="text"] {
+    margin-bottom: 12px;
+}
+
+.player-card .player-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.player-card .player-buttons button {
+    flex: 1;
+    padding: 9px 5px;
+    font-size: 9px;
+}
+
+.preview-chat {
+    background: #080808;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 60px;
+    overflow-wrap: anywhere;
+    line-height: 2;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.glyph {
+    font-size: 24px;
+    vertical-align: middle;
+}
+
+.status {
+    font-size: 10px;
+    color: #8eea8e;
+    line-height: 1.8;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 18px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 25px 10px;
+    color: #888;
+    font-size: 9px;
+    line-height: 2;
+}
+
+.notice {
+    background: #2a1c12;
+    border: 1px solid #74421e;
+    padding: 12px;
+    border-radius: 5px;
+    line-height: 1.8;
+    font-size: 10px;
+    margin-bottom: 14px;
+}
+
+@media (max-width: 520px) {
+    .panel {
+        padding: 13px;
+    }
+
+    .row > button {
+        width: 100%;
+    }
+
+    .field {
+        min-width: 100%;
+    }
+
+    #projectsGrid, #playersGrid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="title.png" alt="Edtra Studios"
+         onerror="this.style.display='none'">
+    <h1>EDTRA HEAD CHAT MAKER</h1>
+    <p>PON TU SKIN EN EL CHAT DEL JUEGO!!</p>
+</header>
+
+<main>
+
+    <!-- PANTALLA DE PROYECTOS -->
+    <section id="dashboard">
+
+        <div class="panel">
+            <h2>📁 MIS PROYECTOS</h2>
+            <p class="muted">
+                Cada proyecto guarda sus jugadores, skins, imágenes y configuración
+                por separado. Los cambios se guardan automáticamente.
+            </p>
+
+            <div class="row">
+                <button id="createProjectBtn">＋ Crear proyecto</button>
+                <button class="secondary" id="refreshBtn">↻ Actualizar</button>
+            </div>
+
+            <p id="dashboardStatus" class="status"></p>
+        </div>
+
+        <div id="projectsGrid"></div>
+
+        <div id="emptyProjects" class="panel empty" style="display:none">
+            <h2>Todavía no tienes proyectos</h2>
+            Crea tu primer proyecto para comenzar.
+            <br><br>
+            <button id="emptyCreateBtn">🆕 Crear mi primer proyecto</button>
+        </div>
+
+    </section>
+
+    <!-- EDITOR -->
+    <section id="editor">
+
+        <div class="panel">
+            <div class="row">
+                <button class="secondary" id="backBtn">← Proyectos</button>
+                <button class="secondary" id="renameImageBtn">🖼 Cambiar imagen</button>
+            </div>
+
+            <hr>
+
+            <h2 id="editorTitle">EDITOR DE PROYECTO</h2>
+            <p class="muted">
+                Edita tu proyecto. No necesitas guardar manualmente:
+                se guardarán los cambios mientras trabajas.
+            </p>
+            <p id="saveStatus" class="status">Cargando proyecto...</p>
+        </div>
+
+        <div class="panel">
+            <h2>⚙️ CONFIGURACIÓN</h2>
+
+            <div class="field">
+                <label for="projectName">Nombre del proyecto</label>
+                <input id="projectName" type="text" maxlength="70"
+                       placeholder="Mi servidor">
+            </div>
+
+            <div class="field">
+                <label for="packName">Nombre del Resource Pack</label>
+                <input id="packName" type="text" maxlength="70"
+                       placeholder="Edtra Custom Heads">
+            </div>
+
+            <div class="field">
+                <label for="namespace">Namespace del proyecto</label>
+                <input id="namespace" type="text" maxlength="32"
+                       placeholder="edtra_heads">
+                <p class="muted">Se normalizará a letras, números y guiones bajos.</p>
+            </div>
+
+            <div class="field">
+                <label for="projectImage">Imagen de portada del proyecto</label>
+                <input id="projectImage" type="file" accept="image/png,image/jpeg,image/webp">
+                <img id="projectPreview" alt="Portada del proyecto"
+                     style="display:none">
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>👥 JUGADORES Y SKINS</h2>
+            <p class="muted">
+                Agrega los jugadores y sube una skin PNG para cada uno.
+                El editor recorta la zona de la cara de la skin clásica.
+            </p>
+
+            <div class="row">
+                <button id="addPlayerBtn">＋ Agregar jugador</button>
+            </div>
+
+            <p id="playerCount" class="muted">0 jugadores</p>
+            <div id="playersGrid"></div>
+
+            <div id="emptyPlayers" class="empty">
+                Todavía no hay jugadores en este proyecto.
+                <br>Presiona «Agregar jugador».
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>💬 VISTA PREVIA DEL CHAT</h2>
+            <p class="muted">
+                Vista ilustrativa del formato. La apariencia final depende
+                de que el Resource Pack esté instalado.
+            </p>
+
+            <div id="chatPreview" class="preview-chat">
+                Tu chat aparecerá aquí...
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>📦 EXPORTAR ADDON</h2>
+
+            <div class="notice">
+                El archivo contiene un Resource Pack con los glifos y un
+                Behavior Pack con el script que modifica los mensajes.
+                Para que las imágenes se vean, los jugadores deben tener
+                el Resource Pack activo. La detección automática de skins
+                no está incluida: las imágenes se asignan manualmente.
+            </div>
+
+            <button id="exportBtn">⬇ Exportar proyecto .MCPACK / .MCADDON</button>
+            <button class="secondary" id="copyScriptBtn">Copiar script de chat</button>
+
+            <p id="exportStatus" class="status"></p>
+        </div>
+
+        <div class="panel">
+            <h2>🗑 ZONA DEL PROYECTO</h2>
+            <p class="muted">
+                Eliminar un proyecto borra sus datos guardados de este navegador.
+            </p>
+            <button class="danger" id="deleteCurrentBtn">Eliminar este proyecto</button>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    EDTRA STUDIOS · HEAD CHAT<br>
+    Los proyectos se guardan localmente en este navegador.
+</footer>
+
+<script>
+'use strict';
+
+/* =========================================================
+   BASE DE DATOS: PROYECTOS INDEPENDIENTES
+========================================================= */
+
+const DB_NAME = 'EdtraHeaD';
+const DB_VERSION = 1;
+const STORE_NAME = 'projects';
+
+let db;
+let currentProject = null;
+let saveTimer = null;
+let pendingSave = false;
+let projectImageObjectUrl = null;
+
+const $ = id => document.getElementById(id);
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = () => {
+            const database = request.result;
+
+            if (!database.objectStoreNames.contains(STORE_NAME)) {
+                database.createObjectStore(STORE_NAME, {
+                    keyPath: 'id'
+                });
+            }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function dbTransaction(mode, callback) {
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, mode);
+        const store = tx.objectStore(STORE_NAME);
+
+        let request;
+
+        try {
+            request = callback(store);
+        } catch (error) {
+            reject(error);
+            return;
+        }
+
+        tx.oncomplete = () => resolve(request ? request.result : undefined);
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () => reject(tx.error || new Error('Operación cancelada'));
+    });
+}
+
+function getAllProjects() {
+    return dbTransaction('readonly', store => store.getAll());
+}
+
+function getProject(id) {
+    return dbTransaction('readonly', store => store.get(id));
+}
+
+function putProject(project) {
+    return dbTransaction('readwrite', store => store.put(project));
+}
+
+function deleteProjectDB(id) {
+    return dbTransaction('readwrite', store => store.delete(id));
+}
+
+function uid() {
+    if (crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+
+    return 'xxxxxxxxyxxx4xxxyxxxyxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+    });
+}
+
+function normalizeNamespace(value) {
+    return (value || 'edtra_heads')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9_]/g, '_')
+        .replace(/_+/g, '_')
+        .slice(0, 32) || 'edtra_heads';
+}
+
+function makeNewProject() {
+    const id = uid();
+
+    return {
+        id,
+        name: 'Mi proyecto',
+        packName: 'Edtra Custom Heads',
+        namespace: 'edtra_heads',
+        image: '',
+        players: [],
+        created: Date.now(),
+        modified: Date.now()
+    };
+}
+
+/* =========================================================
+   NAVEGACIÓN
+========================================================= */
+
+function showDashboard() {
+    $('editor').style.display = 'none';
+    $('dashboard').style.display = 'block';
+    currentProject = null;
+    clearTimeout(saveTimer);
+    renderProjects();
+}
+
+async function openProject(id) {
+    try {
+        const project = await getProject(id);
+
+        if (!project) {
+            alert('No se encontró el proyecto.');
+            return;
+        }
+
+        currentProject = project;
+
+        // Compatibilidad con proyectos antiguos o incompletos.
+        if (!Array.isArray(currentProject.players)) {
+            currentProject.players = [];
+        }
+
+        $('dashboard').style.display = 'none';
+        $('editor').style.display = 'block';
+
+        $('projectName').value = currentProject.name || '';
+        $('packName').value = currentProject.packName || '';
+        $('namespace').value = currentProject.namespace || 'edtra_heads';
+
+        showProjectImage(currentProject.image || '');
+        renderPlayers();
+        updateChatPreview();
+
+        $('editorTitle').textContent = currentProject.name || 'EDITOR DE PROYECTO';
+        $('saveStatus').textContent = 'Proyecto abierto. Guardado automático activado.';
+        $('exportStatus').textContent = '';
+    } catch (error) {
+        console.error(error);
+        alert('No se pudo abrir el proyecto.');
+    }
+}
+
+async function createProject() {
+    const project = makeNewProject();
+
+    try {
+        await putProject(project);
+        await renderProjects();
+        await openProject(project.id);
+
+        $('projectName').focus();
+        $('projectName').select();
+    } catch (error) {
+        console.error(error);
+        alert('No se pudo crear el proyecto. Revisa el espacio disponible del navegador.');
+    }
+}
+
+/* =========================================================
+   GUARDADO AUTOMÁTICO
+========================================================= */
+
+function collectEditorData() {
+    if (!currentProject) return;
+
+    currentProject.name = $('projectName').value.trim() || 'Proyecto sin nombre';
+    currentProject.packName = $('packName').value.trim() || 'Edtra Custom Heads';
+    currentProject.namespace = normalizeNamespace($('namespace').value);
+    currentProject.modified = Date.now();
+}
+
+function scheduleSave() {
+    if (!currentProject) return;
+
+    collectEditorData();
+
+    $('editorTitle').textContent = currentProject.name;
+    $('saveStatus').textContent = 'Guardando cambios...';
+
+    clearTimeout(saveTimer);
+    pendingSave = true;
+
+    saveTimer = setTimeout(async () => {
+        if (!currentProject) return;
+
+        try {
+            await putProject(currentProject);
+            pendingSave = false;
+            $('saveStatus').textContent = '✓ Todos los cambios están guardados.';
+        } catch (error) {
+            console.error(error);
+            $('saveStatus').textContent =
+                'Error al guardar. Puede que el almacenamiento esté lleno.';
+        }
+    }, 350);
+}
+
+async function saveNow() {
+    if (!currentProject) return;
+
+    clearTimeout(saveTimer);
+    collectEditorData();
+
+    try {
+        await putProject(currentProject);
+        pendingSave = false;
+        $('saveStatus').textContent = '✓ Todos los cambios están guardados.';
+    } catch (error) {
+        console.error(error);
+        $('saveStatus').textContent = 'Error al guardar el proyecto.';
+        throw error;
+    }
+}
+
+['projectName', 'packName', 'namespace'].forEach(id => {
+    $(id).addEventListener('input', () => {
+        if (id === 'namespace') {
+            // La normalización final se aplica al guardar/exportar.
+        }
+
+        scheduleSave();
+    });
+});
+
+/* =========================================================
+   PORTADA DEL PROYECTO
+========================================================= */
+
+function showProjectImage(data) {
+    if (projectImageObjectUrl) {
+        URL.revokeObjectURL(projectImageObjectUrl);
+        projectImageObjectUrl = null;
+    }
+
+    if (data) {
+        $('projectPreview').src = data;
+        $('projectPreview').style.display = 'block';
+    } else {
+        $('projectPreview').removeAttribute('src');
+        $('projectPreview').style.display = 'none';
+    }
+}
+
+$('projectImage').addEventListener('change', async event => {
+    const file = event.target.files[0];
+    if (!file || !currentProject) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('Selecciona una imagen PNG, JPG o WEBP.');
+        return;
+    }
+
+    try {
+        currentProject.image = await fileToDataURL(file);
+        showProjectImage(currentProject.image);
+        scheduleSave();
+    } catch (error) {
+        alert('No se pudo cargar la imagen.');
+    }
+
+    event.target.value = '';
+});
+
+$('renameImageBtn').addEventListener('click', () => {
+    $('projectImage').click();
+});
+
+function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
+/* =========================================================
+   JUGADORES Y RECORTE DE SKINS
+========================================================= */
+
+function addPlayer() {
+    if (!currentProject) return;
+
+    const used = currentProject.players.length;
+
+    currentProject.players.push({
+        id: uid(),
+        name: 'Jugador' + (used + 1),
+        skinData: '',
+        headData: ''
+    });
+
+    renderPlayers();
+    scheduleSave();
+}
+
+function renderPlayers() {
+    const grid = $('playersGrid');
+    grid.innerHTML = '';
+
+    const players = currentProject ? currentProject.players : [];
+
+    $('playerCount').textContent =
+        players.length + (players.length === 1 ? ' jugador' : ' jugadores');
+
+    $('emptyPlayers').style.display = players.length ? 'none' : 'block';
+
+    players.forEach((player, index) => {
+        const card = document.createElement('div');
+        card.className = 'player-card';
+
+        const top = document.createElement('div');
+        top.className = 'player-top';
+
+        const img = document.createElement('img');
+        img.className = 'head-preview';
+        img.alt = 'Cabeza del jugador';
+        img.src = player.headData || '';
+
+        if (!player.headData) {
+            img.style.opacity = '.25';
+        }
+
+        const topInfo = document.createElement('div');
+        const title = document.createElement('h3');
+        title.textContent = 'JUGADOR ' + (index + 1);
+
+        const subtitle = document.createElement('p');
+        subtitle.className = 'muted';
+        subtitle.textContent = player.headData ? 'Skin cargada' : 'Sin skin';
+
+        topInfo.append(title, subtitle);
+        top.append(img, topInfo);
+
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Nombre exacto del jugador';
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.maxLength = 40;
+        nameInput.placeholder = 'spiderbimb0';
+        nameInput.value = player.name || '';
+
+        nameInput.addEventListener('input', () => {
+            player.name = nameInput.value;
+            title.textContent = 'JUGADOR ' + (index + 1);
+            updateChatPreview();
+            scheduleSave();
+        });
+
+        const skinLabel = document.createElement('label');
+        skinLabel.textContent = 'Imagen de skin PNG / JPG';
+
+        const skinInput = document.createElement('input');
+        skinInput.type = 'file';
+        skinInput.accept = 'image/png,image/jpeg,image/webp';
+
+        skinInput.addEventListener('change', async event => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const data = await fileToDataURL(file);
+                const headData = await cropHead(data);
+
+                player.skinData = data;
+                player.headData = headData;
+
+                renderPlayers();
+                updateChatPreview();
+                scheduleSave();
+            } catch (error) {
+                console.error(error);
+                alert('No se pudo leer la imagen. Prueba con una skin PNG de Minecraft.');
+            }
+        });
+
+        const buttons = document.createElement('div');
+        buttons.className = 'player-buttons';
+
+        const changeBtn = document.createElement('button');
+        changeBtn.className = 'secondary';
+        changeBtn.textContent = 'Cambiar skin';
+        changeBtn.addEventListener('click', () => skinInput.click());
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'danger';
+        deleteBtn.textContent = 'Eliminar';
+        deleteBtn.addEventListener('click', async () => {
+            if (!confirm('¿Eliminar este jugador y su skin de este proyecto?')) return;
+
+            currentProject.players =
+                currentProject.players.filter(p => p.id !== player.id);
+
+            renderPlayers();
+            updateChatPreview();
+            scheduleSave();
+        });
+
+        buttons.append(changeBtn, deleteBtn);
+
+        card.append(top, nameLabel, nameInput, skinLabel, skinInput, buttons);
+        grid.appendChild(card);
+    });
+}
+
+function cropHead(dataURL) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            /*
+             * Skin clásica:
+             * la cara frontal está en x=8, y=8, con tamaño 8x8.
+             * La zona se amplía a 16x16 para el glifo.
+             */
+            if (image.width >= 64 && image.height >= 32) {
+                ctx.drawImage(image, 8, 8, 8, 8, 0, 0, 16, 16);
+
+                // Superponer la capa exterior de la cabeza si está disponible.
+                if (image.width >= 64 && image.height >= 64) {
+                    ctx.drawImage(image, 40, 8, 8, 8, 0, 0, 16, 16);
+                }
+            } else {
+                // Para una imagen que ya sea un retrato/cabeza.
+                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, 16, 16);
+            }
+
+            resolve(canvas.toDataURL('image/png'));
+        };
+
+        image.onerror = reject;
+        image.src = dataURL;
+    });
+}
+
+$('addPlayerBtn').addEventListener('click', addPlayer);
+
+/* =========================================================
+   PREVISUALIZACIÓN DEL CHAT
+========================================================= */
+
+function updateChatPreview() {
+    const container = $('chatPreview');
+    container.innerHTML = '';
+
+    if (!currentProject || !currentProject.players.length) {
+        container.textContent = 'Agrega un jugador para ver una muestra.';
+        return;
+    }
+
+    currentProject.players.slice(0, 3).forEach(player => {
+        const line = document.createElement('div');
+
+        const head = document.createElement('span');
+        head.className = 'glyph';
+        head.textContent = player.headData
+            ? String.fromCodePoint(0xE200 + currentProject.players.indexOf(player))
+            : '◻';
+
+        const name = document.createElement('span');
+        name.style.color = '#55ff55';
+        name.textContent = (player.name || 'Jugador') + '> ';
+
+        const message = document.createElement('span');
+        message.textContent = '¡Hola, mundo!';
+
+        line.append(head, name, message);
+        container.appendChild(line);
+    });
+}
+
+/* =========================================================
+   TARJETAS DE PROYECTOS
+========================================================= */
+
+async function renderProjects() {
+    const grid = $('projectsGrid');
+    grid.innerHTML = '';
+
+    let projects;
+
+    try {
+        projects = await getAllProjects();
+    } catch (error) {
+        $('dashboardStatus').textContent =
+            'No se pudieron leer los proyectos guardados.';
+        return;
+    }
+
+    projects.sort((a, b) => (b.modified || 0) - (a.modified || 0));
+
+    $('emptyProjects').style.display = projects.length ? 'none' : 'block';
+    $('dashboardStatus').textContent =
+        projects.length + (projects.length === 1 ? ' proyecto guardado' : ' proyectos guardados');
+
+    projects.forEach(project => {
+        const card = document.createElement('article');
+        card.className = 'project-card';
+
+        const image = document.createElement('img');
+        image.className = 'project-cover';
+        image.alt = 'Portada del proyecto';
+        image.src = project.image || '';
+
+        if (!project.image) {
+            image.style.opacity = '.25';
+        }
+
+        const title = document.createElement('h3');
+        title.textContent = project.name || 'Proyecto sin nombre';
+
+        const description = document.createElement('p');
+        description.className = 'muted';
+        const count = Array.isArray(project.players) ? project.players.length : 0;
+        description.textContent =
+            (project.packName || 'Edtra Custom Heads') + ' · ' +
+            count + (count === 1 ? ' jugador' : ' jugadores');
+
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+
+        const openBtn = document.createElement('button');
+        openBtn.textContent = 'Abrir';
+        openBtn.addEventListener('click', () => openProject(project.id));
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'danger';
+        deleteBtn.textContent = 'Eliminar';
+        deleteBtn.addEventListener('click', async () => {
+            if (!confirm('¿Eliminar "' + (project.name || 'Proyecto') + '" permanentemente?')) return;
+
+            try {
+                await deleteProjectDB(project.id);
+                await renderProjects();
+            } catch (error) {
+                alert('No se pudo eliminar el proyecto.');
+            }
+        });
+
+        actions.append(openBtn, deleteBtn);
+        card.append(image, title, description, actions);
+        grid.appendChild(card);
+    });
+}
+
+$('createProjectBtn').addEventListener('click', createProject);
+$('emptyCreateBtn').addEventListener('click', createProject);
+$('refreshBtn').addEventListener('click', renderProjects);
+
+$('backBtn').addEventListener('click', async () => {
+    if (pendingSave) {
+        try {
+            await saveNow();
+        } catch (error) {
+            if (!confirm('No se pudo guardar. ¿Quieres salir de todas formas?')) return;
+        }
+    }
+
+    showDashboard();
+});
+
+/* =========================================================
+   GENERACIÓN DE GLIFOS
+========================================================= */
+
+function dataURLToUint8Array(dataURL) {
+    const base64 = dataURL.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes;
+}
+
+function loadImage(dataURL) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = dataURL;
+    });
+}
+
+async function makeAtlas(players) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 256, 256);
+    ctx.imageSmoothingEnabled = false;
+
+    for (let i = 0; i < Math.min(players.length, 256); i++) {
+        const player = players[i];
+
+        if (!player.headData) continue;
+
+        const image = await loadImage(player.headData);
+        const x = (i % 16) * 16;
+        const y = Math.floor(i / 16) * 16;
+
+        ctx.drawImage(image, 0, 0, image.width, image.height, x, y, 16, 16);
+    }
+
+    return dataURLToUint8Array(canvas.toDataURL('image/png'));
+}
+
+/* =========================================================
+   GENERACIÓN DEL SCRIPT DE CHAT
+========================================================= */
+
+function makeChatScript(project) {
+    const heads = {};
+
+    project.players.slice(0, 256).forEach((player, index) => {
+        if (!player.name.trim()) return;
+        heads[player.name.trim().toLowerCase()] =
+            String.fromCharCode(0xE200 + index);
+    });
+
+    const mapString = JSON.stringify(heads, null, 4);
+
+    return `import { world } from '@minecraft/server';
+
+const HEADS = ${mapString};
+
+world.beforeEvents.chatSend.subscribe((event) => {
+    const player = event.sender;
+    const message = event.message;
+    const head = HEADS[player.name.toLowerCase()] ?? '';
+
+    event.cancel = true;
+    world.sendMessage(head + '§7' + player.name + '§r> ' + message);
+});
+`;
+}
+
+/* =========================================================
+   EXPORTACIÓN DEL ADDON
+========================================================= */
+
+function manifestPack(name, description, moduleType, dependencies = []) {
+    const modules = [{
+        type: moduleType,
+        uuid: uid(),
+        version: [1, 0, 0]
+    }];
+
+    if (moduleType === 'script') {
+        modules[0].language = 'javascript';
+        modules[0].entry = 'scripts/main.js';
+    }
+
+    return {
+        format_version: 2,
+        header: {
+            name,
+            description,
+            uuid: uid(),
+            version: [1, 0, 0],
+            min_engine_version: [1, 21, 0]
+        },
+        modules,
+        dependencies
+    };
+}
+
+async function exportAddon() {
+    if (!currentProject) return;
+
+    if (typeof JSZip === 'undefined') {
+        alert('No se pudo cargar JSZip. Comprueba tu conexión a Internet.');
+        return;
+    }
+
+    if (!currentProject.players.length) {
+        alert('Agrega al menos un jugador antes de exportar.');
+        return;
+    }
+
+    const noNames = currentProject.players.some(p => !p.name.trim());
+
+    if (noNames) {
+        alert('Todos los jugadores necesitan un nombre.');
+        return;
+    }
+
+    const duplicated = new Set();
+    const names = currentProject.players.map(p => p.name.trim().toLowerCase());
+
+    for (const name of names) {
+        if (duplicated.has(name)) {
+            alert('Hay nombres repetidos. Cada jugador necesita un nombre único.');
+            return;
+        }
+        duplicated.add(name);
+    }
+
+    if (currentProject.players.some(p => !p.headData)) {
+        if (!confirm('Hay jugadores sin skin. Se exportarán sin imagen de cabeza. ¿Continuar?')) {
+            return;
+        }
+    }
+
+    const button = $('exportBtn');
+    button.disabled = true;
+    $('exportStatus').textContent = 'Preparando los paquetes...';
+
+    try {
+        await saveNow();
+
+        const project = currentProject;
+        const namespace = normalizeNamespace(project.namespace);
+        const atlas = await makeAtlas(project.players);
+        const script = makeChatScript(project);
+
+        const resourcePack = new JSZip();
+        const behaviorPack = new JSZip();
+
+        resourcePack.file('manifest.json', JSON.stringify(
+            manifestPack(
+                project.packName || 'Edtra Custom Heads',
+                'Custom chat head - ' + project.name,
+                'resources'
+            ), null, 2
+        ));
+
+        resourcePack.file('pack_icon.png',
+            project.image
+                ? dataURLToUint8Array(project.image)
+                : makeFallbackIcon()
+        );
+
+        resourcePack.file('font/glyph_E2.png', atlas);
+
+        /*
+         * Archivo de idioma de apoyo.
+         * Los glifos privados U+E200 a U+E2FF están dibujados
+         * en el atlas de 16x16 celdas.
+         */
+        resourcePack.file('texts/languages.json', JSON.stringify([
+            'en_US'
+        ], null, 2));
+
+        resourcePack.file('texts/en_US.lang',
+            'pack.name=' + (project.packName || 'Edtra Custom Heads') + '\n' +
+            'pack.description=Custom player head\n'
+        );
+
+        const behaviorManifest = manifestPack(
+            project.name + ' Chat Script',
+            'Displays custom player heads in chat',
+            'script',
+            [
+                {
+                    module_name: '@minecraft/server',
+                    version: 'beta'
+                }
+            ]
+        );
+
+        behaviorPack.file('manifest.json', JSON.stringify(behaviorManifest, null, 2));
+        behaviorPack.file('pack_icon.png',
+            project.image
+                ? dataURLToUint8Array(project.image)
+                : makeFallbackIcon()
+        );
+        behaviorPack.file('scripts/main.js', script);
+
+        $('exportStatus').textContent = 'Generando archivo .mcaddon...';
+
+        const resourceBlob = await resourcePack.generateAsync({ type: 'blob' });
+        const behaviorBlob = await behaviorPack.generateAsync({ type: 'blob' });
+
+        const addon = new JSZip();
+
+        addon.file(namespace + '_resources.mcpack', resourceBlob);
+        addon.file(namespace + '_behavior.mcpack', behaviorBlob);
+
+        const finalBlob = await addon.generateAsync({
+            type: 'blob',
+            compression: 'DEFLATE',
+            compressionOptions: { level: 6 }
+        });
+
+        const url = URL.createObjectURL(finalBlob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = namespace + '.mcaddon';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+
+        $('exportStatus').textContent =
+            '✓ Archivo generado. Revisa tus descargas.';
+    } catch (error) {
+        console.error(error);
+        $('exportStatus').textContent =
+            'Error al exportar: ' + (error.message || 'error desconocido');
+        alert('No se pudo generar el addon. Revisa la consola o prueba con menos imágenes.');
+    } finally {
+        button.disabled = false;
+    }
+}
+
+function makeFallbackIcon() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#202020';
+    ctx.fillRect(0, 0, 64, 64);
+    ctx.fillStyle = '#e53935';
+    ctx.fillRect(12, 12, 40, 40);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('EH', 32, 32);
+
+    return dataURLToUint8Array(canvas.toDataURL('image/png'));
+}
+
+$('exportBtn').addEventListener('click', exportAddon);
+
+$('copyScriptBtn').addEventListener('click', async () => {
+    if (!currentProject) return;
+
+    const script = makeChatScript(currentProject);
+
+    try {
+        await navigator.clipboard.writeText(script);
+        $('exportStatus').textContent = '✓ Script copiado.';
+    } catch (error) {
+        const area = document.createElement('textarea');
+        area.value = script;
+        document.body.appendChild(area);
+        area.select();
+
+        const copied = document.execCommand('copy');
+        area.remove();
+
+        $('exportStatus').textContent = copied
+            ? '✓ Script copiado.'
+            : 'No se pudo copiar. Usa un navegador con permisos de portapapeles.';
+    }
+});
+
+/* =========================================================
+   ELIMINAR PROYECTO ACTUAL
+========================================================= */
+
+$('deleteCurrentBtn').addEventListener('click', async () => {
+    if (!currentProject) return;
+
+    const name = currentProject.name || 'Proyecto';
+
+    if (!confirm('¿Eliminar permanentemente "' + name + '" y todo su trabajo guardado?')) {
+        return;
+    }
+
+    try {
+        clearTimeout(saveTimer);
+        await deleteProjectDB(currentProject.id);
+        currentProject = null;
+        showDashboard();
+    } catch (error) {
+        alert('No se pudo eliminar el proyecto.');
+    }
+});
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+async function init() {
+    try {
+        if (!('indexedDB' in window)) {
+            throw new Error('Este navegador no admite IndexedDB.');
+        }
+
+        db = await openDB();
+        await renderProjects();
+    } catch (error) {
+        console.error(error);
+        $('dashboardStatus').textContent =
+            'No se pudo abrir el almacenamiento local. Prueba en un navegador compatible.';
+        alert('Error al iniciar el almacenamiento de proyectos.');
+    }
+}
+
+init();
+</script>
+
+</body>
+</html>
