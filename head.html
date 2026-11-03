@@ -18,9 +18,7 @@
     --muted: #aaa;
 }
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -33,9 +31,7 @@ body {
     font-size: 12px;
 }
 
-button, input, textarea {
-    font: inherit;
-}
+button, input, textarea { font: inherit; }
 
 button {
     cursor: pointer;
@@ -58,13 +54,8 @@ button:disabled {
     transform: none;
 }
 
-.secondary {
-    background: #393939;
-}
-
-.danger {
-    background: #8e2222;
-}
+.secondary { background: #393939; }
+.danger { background: #8e2222; }
 
 header {
     padding: 18px 14px;
@@ -110,9 +101,7 @@ h2 {
     margin: 0 0 15px;
 }
 
-h3 {
-    font-size: 12px;
-}
+h3 { font-size: 12px; }
 
 .muted {
     color: var(--muted);
@@ -127,9 +116,7 @@ h3 {
     gap: 10px;
 }
 
-.row > button {
-    flex-shrink: 0;
-}
+.row > button { flex-shrink: 0; }
 
 input[type="text"], textarea {
     width: 100%;
@@ -141,9 +128,7 @@ input[type="text"], textarea {
     outline: none;
 }
 
-input:focus, textarea:focus {
-    border-color: var(--red);
-}
+input:focus, textarea:focus { border-color: var(--red); }
 
 label {
     display: block;
@@ -194,9 +179,7 @@ input[type="file"] {
     overflow-wrap: anywhere;
 }
 
-.project-card .muted {
-    margin-bottom: 12px;
-}
+.project-card .muted { margin-bottom: 12px; }
 
 .card-actions {
     display: flex;
@@ -216,13 +199,8 @@ input[type="file"] {
     line-height: 2;
 }
 
-#editor {
-    display: none;
-}
-
-#dashboard {
-    display: block;
-}
+#editor { display: none; }
+#dashboard { display: block; }
 
 #projectPreview {
     width: 100%;
@@ -251,9 +229,7 @@ input[type="file"] {
     flex-shrink: 0;
 }
 
-.player-card input[type="text"] {
-    margin-bottom: 12px;
-}
+.player-card input[type="text"] { margin-bottom: 12px; }
 
 .player-card .player-buttons {
     display: flex;
@@ -279,9 +255,14 @@ input[type="file"] {
     font-size: 14px;
 }
 
+/* CABEZA MÁS PEQUEÑA EN LA VISTA PREVIA */
 .glyph {
-    font-size: 24px;
+    font-size: 12px;
     vertical-align: middle;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
 }
 
 .status {
@@ -315,17 +296,11 @@ footer {
 }
 
 @media (max-width: 520px) {
-    .panel {
-        padding: 13px;
-    }
+    .panel { padding: 13px; }
 
-    .row > button {
-        width: 100%;
-    }
+    .row > button { width: 100%; }
 
-    .field {
-        min-width: 100%;
-    }
+    .field { min-width: 100%; }
 
     #projectsGrid, #playersGrid {
         grid-template-columns: 1fr;
@@ -345,9 +320,7 @@ footer {
 
 <main>
 
-    <!-- PANTALLA DE PROYECTOS -->
     <section id="dashboard">
-
         <div class="panel">
             <h2>📁 MIS PROYECTOS</h2>
             <p class="muted">
@@ -371,10 +344,8 @@ footer {
             <br><br>
             <button id="emptyCreateBtn">🆕 Crear mi primer proyecto</button>
         </div>
-
     </section>
 
-    <!-- EDITOR -->
     <section id="editor">
 
         <div class="panel">
@@ -481,7 +452,6 @@ footer {
         </div>
 
     </section>
-
 </main>
 
 <footer>
@@ -492,9 +462,7 @@ footer {
 <script>
 'use strict';
 
-/* =========================================================
-   BASE DE DATOS: PROYECTOS INDEPENDIENTES
-========================================================= */
+/* BASE DE DATOS */
 
 const DB_NAME = 'EdtraHeaD';
 const DB_VERSION = 1;
@@ -564,9 +532,7 @@ function deleteProjectDB(id) {
 }
 
 function uid() {
-    if (crypto.randomUUID) {
-        return crypto.randomUUID();
-    }
+    if (crypto.randomUUID) return crypto.randomUUID();
 
     return 'xxxxxxxxyxxx4xxxyxxxyxxxxxxxxxxx'.replace(/[xy]/g, c => {
         const r = Math.random() * 16 | 0;
@@ -598,9 +564,7 @@ function makeNewProject() {
     };
 }
 
-/* =========================================================
-   NAVEGACIÓN
-========================================================= */
+/* NAVEGACIÓN */
 
 function showDashboard() {
     $('editor').style.display = 'none';
@@ -621,7 +585,6 @@ async function openProject(id) {
 
         currentProject = project;
 
-        // Compatibilidad con proyectos antiguos o incompletos.
         if (!Array.isArray(currentProject.players)) {
             currentProject.players = [];
         }
@@ -662,9 +625,7 @@ async function createProject() {
     }
 }
 
-/* =========================================================
-   GUARDADO AUTOMÁTICO
-========================================================= */
+/* GUARDADO AUTOMÁTICO */
 
 function collectEditorData() {
     if (!currentProject) return;
@@ -720,17 +681,11 @@ async function saveNow() {
 
 ['projectName', 'packName', 'namespace'].forEach(id => {
     $(id).addEventListener('input', () => {
-        if (id === 'namespace') {
-            // La normalización final se aplica al guardar/exportar.
-        }
-
         scheduleSave();
     });
 });
 
-/* =========================================================
-   PORTADA DEL PROYECTO
-========================================================= */
+/* PORTADA DEL PROYECTO */
 
 function showProjectImage(data) {
     if (projectImageObjectUrl) {
@@ -780,9 +735,7 @@ function fileToDataURL(file) {
     });
 }
 
-/* =========================================================
-   JUGADORES Y RECORTE DE SKINS
-========================================================= */
+/* JUGADORES Y RECORTE DE SKINS */
 
 function addPlayer() {
     if (!currentProject) return;
@@ -823,9 +776,7 @@ function renderPlayers() {
         img.alt = 'Cabeza del jugador';
         img.src = player.headData || '';
 
-        if (!player.headData) {
-            img.style.opacity = '.25';
-        }
+        if (!player.headData) img.style.opacity = '.25';
 
         const topInfo = document.createElement('div');
         const title = document.createElement('h3');
@@ -922,20 +873,13 @@ function cropHead(dataURL) {
             const ctx = canvas.getContext('2d');
             ctx.imageSmoothingEnabled = false;
 
-            /*
-             * Skin clásica:
-             * la cara frontal está en x=8, y=8, con tamaño 8x8.
-             * La zona se amplía a 16x16 para el glifo.
-             */
             if (image.width >= 64 && image.height >= 32) {
                 ctx.drawImage(image, 8, 8, 8, 8, 0, 0, 16, 16);
 
-                // Superponer la capa exterior de la cabeza si está disponible.
                 if (image.width >= 64 && image.height >= 64) {
                     ctx.drawImage(image, 40, 8, 8, 8, 0, 0, 16, 16);
                 }
             } else {
-                // Para una imagen que ya sea un retrato/cabeza.
                 ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, 16, 16);
             }
 
@@ -949,9 +893,7 @@ function cropHead(dataURL) {
 
 $('addPlayerBtn').addEventListener('click', addPlayer);
 
-/* =========================================================
-   PREVISUALIZACIÓN DEL CHAT
-========================================================= */
+/* VISTA PREVIA DEL CHAT */
 
 function updateChatPreview() {
     const container = $('chatPreview');
@@ -983,9 +925,7 @@ function updateChatPreview() {
     });
 }
 
-/* =========================================================
-   TARJETAS DE PROYECTOS
-========================================================= */
+/* TARJETAS DE PROYECTOS */
 
 async function renderProjects() {
     const grid = $('projectsGrid');
@@ -1016,9 +956,7 @@ async function renderProjects() {
         image.alt = 'Portada del proyecto';
         image.src = project.image || '';
 
-        if (!project.image) {
-            image.style.opacity = '.25';
-        }
+        if (!project.image) image.style.opacity = '.25';
 
         const title = document.createElement('h3');
         title.textContent = project.name || 'Proyecto sin nombre';
@@ -1073,9 +1011,7 @@ $('backBtn').addEventListener('click', async () => {
     showDashboard();
 });
 
-/* =========================================================
-   GENERACIÓN DE GLIFOS
-========================================================= */
+/* GENERACIÓN DE GLIFOS */
 
 function dataURLToUint8Array(dataURL) {
     const base64 = dataURL.split(',')[1];
@@ -1122,9 +1058,7 @@ async function makeAtlas(players) {
     return dataURLToUint8Array(canvas.toDataURL('image/png'));
 }
 
-/* =========================================================
-   GENERACIÓN DEL SCRIPT DE CHAT
-========================================================= */
+/* GENERACIÓN DEL SCRIPT DE CHAT */
 
 function makeChatScript(project) {
     const heads = {};
@@ -1152,9 +1086,7 @@ world.beforeEvents.chatSend.subscribe((event) => {
 `;
 }
 
-/* =========================================================
-   EXPORTACIÓN DEL ADDON
-========================================================= */
+/* EXPORTACIÓN DEL ADDON */
 
 function manifestPack(name, description, moduleType, dependencies = []) {
     const modules = [{
@@ -1250,11 +1182,6 @@ async function exportAddon() {
 
         resourcePack.file('font/glyph_E2.png', atlas);
 
-        /*
-         * Archivo de idioma de apoyo.
-         * Los glifos privados U+E200 a U+E2FF están dibujados
-         * en el atlas de 16x16 celdas.
-         */
         resourcePack.file('texts/languages.json', JSON.stringify([
             'en_US'
         ], null, 2));
@@ -1367,9 +1294,7 @@ $('copyScriptBtn').addEventListener('click', async () => {
     }
 });
 
-/* =========================================================
-   ELIMINAR PROYECTO ACTUAL
-========================================================= */
+/* ELIMINAR PROYECTO ACTUAL */
 
 $('deleteCurrentBtn').addEventListener('click', async () => {
     if (!currentProject) return;
@@ -1390,9 +1315,7 @@ $('deleteCurrentBtn').addEventListener('click', async () => {
     }
 });
 
-/* =========================================================
-   INICIO
-========================================================= */
+/* INICIO */
 
 async function init() {
     try {
