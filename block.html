@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edtra Block Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#101319;--panel:#1b2029;--line:#343d4c;--text:#f1f5fa;--muted:#a2afc0;--accent:#65e0b2;--blue:#80adff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui,Arial,sans-serif}
+button,input,select{font:inherit}
+button{background:#2b3443;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer}
+button:active{transform:scale(.98)}
+button.active,button.primary{background:var(--accent);color:#10231b;border-color:var(--accent);font-weight:700}
+input,select{width:100%;background:#11161e;color:var(--text);border:1px solid var(--line);padding:10px;border-radius:8px;min-width:0}
+input[type=file]{font-size:12px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}
+h1{font-size:19px;margin:0}
+h2{font-size:15px;margin:0 0 12px}
+p{margin:0}
+header{position:sticky;top:0;z-index:10;background:#101319ed;backdrop-filter:blur(12px);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;display:grid;place-items:center;background:var(--accent);color:#10231b;border-radius:10px;font-weight:900;font-size:20px}
+.small{font-size:11px;color:var(--muted)}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+main{max-width:1250px;margin:auto;padding:13px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;min-width:0}
+.full{grid-column:1/-1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{min-width:0}
+.divider{height:1px;background:var(--line);margin:15px 0}
+.stage{height:320px;position:relative;overflow:hidden;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:radial-gradient(ellipse at center,#303b4b,#121720 75%);perspective:900px;touch-action:none}
+.cube{width:170px;height:170px;position:relative;transform-style:preserve-3d;transform:rotateX(-24deg) rotateY(-35deg);will-change:transform}
+.face{position:absolute;left:50%;top:50%;width:170px;height:170px;margin:0;backface-visibility:hidden;background-color:#7d8d7c;background-repeat:no-repeat;image-rendering:pixelated;border:1px solid #0009;box-shadow:inset 0 0 0 1px #ffffff18}
+.face.up{transform:translate(-50%,-50%) rotateX(90deg) translateZ(85px)}
+.face.down{transform:translate(-50%,-50%) rotateX(-90deg) translateZ(85px)}
+.face.north{transform:translate(-50%,-50%) rotateY(180deg) translateZ(85px)}
+.face.south{transform:translate(-50%,-50%) translateZ(85px)}
+.face.east{transform:translate(-50%,-50%) rotateY(90deg) translateZ(85px)}
+.face.west{transform:translate(-50%,-50%) rotateY(-90deg) translateZ(85px)}
+.face.up{filter:brightness(1.15)}
+.face.east,.face.west{filter:brightness(.78)}
+.face.down{filter:brightness(.58)}
+.hint{position:absolute;bottom:9px;left:8px;right:8px;text-align:center;font-size:11px;color:#bac6d6;pointer-events:none}
+.facegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.facegrid button{font-size:12px;padding:10px 3px}
+.uvbox{width:100%;min-height:200px;max-height:450px;background:#0e1218;border:1px solid var(--line);border-radius:9px;overflow:auto;display:flex;align-items:center;justify-content:center;padding:10px;touch-action:pan-x pan-y}
+#uvCanvas{display:block;image-rendering:pixelated;cursor:crosshair;touch-action:none;max-width:none}
+.uvinfo{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+.preview{height:100px;display:grid;place-items:center;background:#0e1218;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.preview img{max-width:90%;max-height:90%;image-rendering:pixelated;object-fit:contain}
+.note{background:#222e3b;padding:10px;border-radius:9px;font-size:12px;color:#c7d5e7;line-height:1.5}
+.status{font-size:12px;color:var(--accent);margin-top:8px;min-height:16px;overflow-wrap:anywhere}
+footer{text-align:center;padding:12px;color:var(--muted);font-size:11px}
+@media(max-width:720px){
+header{align-items:flex-start;flex-direction:column}
+header .actions{width:100%}
+header .actions button{flex:1}
+main{grid-template-columns:1fr;padding:9px}
+.stage{height:290px}
+.cube{width:150px;height:150px}
+.face{width:150px;height:150px}
+.face.up{transform:translate(-50%,-50%) rotateX(90deg) translateZ(75px)}
+.face.down{transform:translate(-50%,-50%) rotateX(-90deg) translateZ(75px)}
+.face.north{transform:translate(-50%,-50%) rotateY(180deg) translateZ(75px)}
+.face.south{transform:translate(-50%,-50%) translateZ(75px)}
+.face.east{transform:translate(-50%,-50%) rotateY(90deg) translateZ(75px)}
+.face.west{transform:translate(-50%,-50%) rotateY(-90deg) translateZ(75px)}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<header>
+<div class="brand">
+<div class="logo">E</div>
+<div><h1>Edtra Block Studio</h1><div class="small">Minecraft Bedrock · Editor de bloques</div></div>
+</div>
+<div class="actions">
+<button id="reset">Reiniciar</button>
+<button class="primary" id="exportAddon">Descargar .mcaddon</button>
+</div>
+</header>
+
+<main>
+<section class="panel">
+<h2>1. Configura tu bloque</h2>
+<div class="grid">
+<div class="field full"><label>Identificador</label><input id="blockId" value="edtra:custom_block"></div>
+<div class="field"><label>Nombre de textura</label><input id="texName" value="edtra_custom_block"></div>
+<div class="field"><label>Categoría creativa</label><select id="category"><option value="construction">Construcción</option><option value="nature">Naturaleza</option><option value="equipment">Equipo</option><option value="items">Objetos</option><option value="none">Ninguna</option></select></div>
+<div class="field"><label>Tiempo de rotura</label><input id="destroy" type="number" min="0" step=".1" value="3"></div>
+<div class="field"><label>Resistencia explosiva</label><input id="explosion" type="number" min="0" step=".1" value="6"></div>
+<div class="field"><label>Luz emitida (0–15)</label><input id="light" type="number" min="0" max="15" value="0"></div>
+<div class="field"><label>Sonido de rotura</label><select id="sound"><option value="stone">Piedra</option><option value="wood">Madera</option><option value="gravel">Grava</option><option value="grass">Hierba</option><option value="metal">Metal</option><option value="glass">Cristal</option></select></div>
+<div class="field"><label>Render de textura</label><select id="render"><option value="opaque">Opaco</option><option value="alpha_test">Transparencia recortada</option><option value="blend">Transparencia</option></select></div>
+<div class="field full"><label>Importar textura PNG/JPG/WEBP</label><input id="file" type="file" accept="image/png,image/jpeg,image/webp"></div>
+<div class="field full"><div class="note" id="texInfo">Textura de muestra: 16 × 16 píxeles.</div></div>
+</div>
+
+<div class="divider"></div>
+<h2>2. Vista previa 3D</h2>
+<div class="stage" id="stage">
+<div class="cube" id="cube">
+<div class="face up" data-face="up"></div>
+<div class="face down" data-face="down"></div>
+<div class="face north" data-face="north"></div>
+<div class="face south" data-face="south"></div>
+<div class="face east" data-face="east"></div>
+<div class="face west" data-face="west"></div>
+</div>
+<div class="hint">Mantén pulsado y arrastra para girar el bloque</div>
+</div>
+<div class="actions" style="margin-top:9px">
+<button id="turnLeft">↶ Girar</button>
+<button id="turnRight">↷ Girar</button>
+<button id="resetView">Centrar vista</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>3. Editor UV por cara</h2>
+<div class="facegrid" id="faces">
+<button data-select="up">⬆ Arriba</button>
+<button data-select="north">Norte</button>
+<button data-select="down">⬇ Abajo</button>
+<button data-select="west">Oeste</button>
+<button data-select="south" class="active">Sur</button>
+<button data-select="east">Este</button>
+</div>
+<div class="divider"></div>
+<h2 id="faceTitle">Cara: Sur</h2>
+<p class="small" style="margin-bottom:10px">Arrastra sobre la textura para elegir el área UV de esta cara.</p>
+<div class="uvbox" id="uvbox"><canvas id="uvCanvas"></canvas></div>
+<div class="uvinfo">
+<span id="uvDimensions">Textura: 16 × 16</span>
+<span id="selectionInfo">UV: 0, 0 · 16 × 16</span>
+</div>
+<div class="actions" style="margin-top:9px">
+<button id="selectFull">Textura completa</button>
+<button id="resetFace">Restablecer cara</button>
+<button id="applyAll">Copiar a las 6 caras</button>
+</div>
+<div class="divider"></div>
+<h2>4. Ajustar región UV</h2>
+<div class="preview"><img id="cropPreview" alt="Vista previa de la región UV"></div>
+<div class="grid" style="margin-top:12px">
+<div class="field"><label>Posición X (px)</label><input id="cx" type="number" min="0" value="0"></div>
+<div class="field"><label>Posición Y (px)</label><input id="cy" type="number" min="0" value="0"></div>
+<div class="field"><label>Ancho (px)</label><input id="cw" type="number" min="1" value="16"></div>
+<div class="field"><label>Alto (px)</label><input id="ch" type="number" min="1" value="16"></div>
+</div>
+<div class="divider"></div>
+<h2>5. Exportar addon</h2>
+<div class="note">Descarga un archivo .mcaddon con los packs de Minecraft Bedrock, la textura importada y la geometría personalizada con las regiones UV de las seis caras.</div>
+<div class="actions" style="margin-top:10px">
+<button class="primary" id="exportAddon2" style="width:100%">Descargar addon (.mcaddon)</button>
+</div>
+<div class="status" id="status"></div>
+</section>
+</main>
+<footer>Edtra Block Studio · Procesamiento local en tu navegador</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const names={up:"Arriba",down:"Abajo",north:"Norte",south:"Sur",east:"Este",west:"Oeste"};
+const sides=["up","down","north","south","east","west"];
+let selected="south",img=null,imgW=16,imgH=16,angleX=-24,angleY=-35,drag=false,lastX=0,lastY=0,selecting=false,uvStart=null,uvEnd=null;
+const regions={};
+sides.forEach(f=>regions[f]={x:0,y:0,w:16,h:16});
+
+function makeSample(){
+const c=document.createElement("canvas");c.width=16;c.height=16;
+const ctx=c.getContext("2d");
+ctx.fillStyle="#798c79";ctx.fillRect(0,0,16,16);
+ctx.fillStyle="#617561";
+for(let y=0;y<16;y+=4)for(let x=0;x<16;x+=4)if((x+y)%8===0)ctx.fillRect(x,y,4,4);
+return c;
+}
+img=makeSample();
+
+function textureURL(){return img.toDataURL("image/png")}
+
+function fix(r){
+r.x=Math.max(0,Math.min(imgW-1,Math.floor(Number(r.x)||0)));
+r.y=Math.max(0,Math.min(imgH-1,Math.floor(Number(r.y)||0)));
+r.w=Math.max(1,Math.min(imgW-r.x,Math.floor(Number(r.w)||1)));
+r.h=Math.max(1,Math.min(imgH-r.y,Math.floor(Number(r.h)||1)));
+}
+
+function cropDataURL(r){
+fix(r);
+const c=document.createElement("canvas");
+c.width=r.w;c.height=r.h;
+c.getContext("2d").drawImage(img,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+return c.toDataURL("image/png");
+}
+
+function setFaceTexture(side){
+const el=document.querySelector('[data-face="'+side+'"]');
+const r=regions[side];fix(r);
+const size=el.clientWidth||170;
+el.style.backgroundImage='url("'+textureURL()+'")';
+el.style.backgroundSize=(imgW*size/r.w)+"px "+(imgH*size/r.h)+"px";
+el.style.backgroundPosition=(-r.x*size/r.w)+"px "+(-r.y*size/r.h)+"px";
+el.style.backgroundRepeat="no-repeat";
+el.style.backgroundColor="#798c79";
+}
+
+function showRegion(){
+const r=regions[selected];fix(r);
+$("faceTitle").textContent="Cara: "+names[selected];
+$("cx").value=r.x;$("cy").value=r.y;
+$("cw").value=r.w;$("ch").value=r.h;
+$("cropPreview").src=cropDataURL(r);
+$("selectionInfo").textContent="UV: "+r.x+", "+r.y+" · "+r.w+" × "+r.h;
+document.querySelectorAll("[data-select]").forEach(b=>b.classList.toggle("active",b.dataset.select===selected));
+}
+
+function drawUV(){
+const canvas=$("uvCanvas"),box=$("uvbox");
+const maxW=Math.max(100,box.clientWidth-25);
+const maxH=Math.min(420,Math.max(180,window.innerHeight*.48));
+const scale=Math.min(maxW/imgW,maxH/imgH,20);
+canvas.width=imgW;canvas.height=imgH;
+canvas.style.width=Math.max(1,imgW*scale)+"px";
+canvas.style.height=Math.max(1,imgH*scale)+"px";
+const ctx=canvas.getContext("2d");
+ctx.imageSmoothingEnabled=false;
+ctx.clearRect(0,0,imgW,imgH);
+ctx.drawImage(img,0,0);
+if(imgW<=256&&imgH<=256){
+ctx.strokeStyle="#ffffff45";ctx.lineWidth=1/scale;
+for(let x=0;x<=imgW;x+=4){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,imgH);ctx.stroke()}
+for(let y=0;y<=imgH;y+=4){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(imgW,y);ctx.stroke()}
+}
+const r=regions[selected];
+ctx.fillStyle="#0009";ctx.fillRect(0,0,imgW,imgH);
+ctx.clearRect(r.x,r.y,r.w,r.h);
+ctx.drawImage(img,r.x,r.y,r.w,r.h,r.x,r.y,r.w,r.h);
+if(selecting&&uvStart&&uvEnd){
+const x=Math.min(uvStart.x,uvEnd.x),y=Math.min(uvStart.y,uvEnd.y);
+const w=Math.abs(uvEnd.x-uvStart.x),h=Math.abs(uvEnd.y-uvStart.y);
+ctx.fillStyle="#65e0b344";ctx.fillRect(x,y,w,h);
+ctx.strokeStyle="#ffffff";ctx.lineWidth=1/scale;
+ctx.strokeRect(x,y,Math.max(w,1/scale),Math.max(h,1/scale));
+}
+ctx.strokeStyle="#65e0b2";ctx.lineWidth=1/scale;
+ctx.strokeRect(r.x,r.y,Math.max(r.w,1/scale),Math.max(r.h,1/scale));
+$("uvDimensions").textContent="Textura: "+imgW+" × "+imgH+" px";
+}
+
+function refresh(){
+sides.forEach(setFaceTexture);
+showRegion();
+drawUV();
+}
+
+function pointerPixel(e){
+const rect=$("uvCanvas").getBoundingClientRect();
+return {
+x:Math.max(0,Math.min(imgW,Math.floor((e.clientX-rect.left)/rect.width*imgW))),
+y:Math.max(0,Math.min(imgH,Math.floor((e.clientY-rect.top)/rect.height*imgH)))
+};
+}
+
+function finishSelection(){
+if(!uvStart||!uvEnd)return;
+const x=Math.min(uvStart.x,uvEnd.x),y=Math.min(uvStart.y,uvEnd.y);
+const w=Math.abs(uvEnd.x-uvStart.x),h=Math.abs(uvEnd.y-uvStart.y);
+if(w<1||h<1)return;
+regions[selected]={x,y,w,h};
+refresh();
+}
+
+$("uvCanvas").addEventListener("pointerdown",e=>{
+e.preventDefault();
+selecting=true;uvStart=pointerPixel(e);uvEnd=uvStart;
+$("uvCanvas").setPointerCapture(e.pointerId);
+drawUV();
+});
+
+$("uvCanvas").addEventListener("pointermove",e=>{
+if(!selecting)return;
+uvEnd=pointerPixel(e);
+drawUV();
+$("selectionInfo").textContent="Selección UV en curso";
+});
+
+function endSelection(e){
+if(!selecting)return;
+uvEnd=pointerPixel(e);
+selecting=false;
+finishSelection();
+}
+$("uvCanvas").addEventListener("pointerup",endSelection);
+$("uvCanvas").addEventListener("pointercancel",()=>{selecting=false;drawUV()});
+
+document.querySelectorAll("[data-select]").forEach(b=>{
+b.addEventListener("click",()=>{selected=b.dataset.select;refresh()});
+});
+
+["cx","cy","cw","ch"].forEach(id=>{
+$(id).addEventListener("change",()=>{
+const r=regions[selected];
+r.x=+$("cx").value;r.y=+$("cy").value;
+r.w=+$("cw").value;r.h=+$("ch").value;
+fix(r);refresh();
+});
+});
+
+$("selectFull").onclick=()=>{
+regions[selected]={x:0,y:0,w:imgW,h:imgH};refresh();
+};
+
+$("resetFace").onclick=()=>{
+regions[selected]={x:0,y:0,w:Math.min(16,imgW),h:Math.min(16,imgH)};
+refresh();
+};
+
+$("applyAll").onclick=()=>{
+sides.forEach(f=>regions[f]={...regions[selected]});
+refresh();
+$("status").textContent="Región aplicada a las seis caras.";
+};
+
+$("file").addEventListener("change",e=>{
+const file=e.target.files&&e.target.files[0];
+if(!file)return;
+if(file.size>32*1024*1024){alert("La imagen supera los 32 MB.");return}
+const reader=new FileReader();
+reader.onload=()=>{
+const next=new Image();
+next.onload=()=>{
+if(next.naturalWidth>4096||next.naturalHeight>4096){alert("La textura no puede superar 4096 × 4096 píxeles.");return}
+const c=document.createElement("canvas");
+c.width=next.naturalWidth;c.height=next.naturalHeight;
+c.getContext("2d").drawImage(next,0,0);
+img=c;imgW=c.width;imgH=c.height;
+sides.forEach(f=>regions[f]={x:0,y:0,w:Math.min(16,imgW),h:Math.min(16,imgH)});
+$("texInfo").textContent="Textura: "+imgW+" × "+imgH+" píxeles";
+refresh();
+};
+next.onerror=()=>alert("No se pudo abrir la imagen.");
+next.src=reader.result;
+};
+reader.readAsDataURL(file);
+});
+
+function setView(){
+$("cube").style.transform=`rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+}
+$("resetView").onclick=()=>{angleX=-24;angleY=-35;setView()};
+$("turnLeft").onclick=()=>{angleY-=25;setView()};
+$("turnRight").onclick=()=>{angleY+=25;setView()};
+
+$("stage").addEventListener("pointerdown",e=>{
+drag=true;lastX=e.clientX;lastY=e.clientY;
+$("stage").setPointerCapture(e.pointerId);
+});
+$("stage").addEventListener("pointermove",e=>{
+if(!drag)return;
+angleY+=(e.clientX-lastX)*.8;
+angleX-=(e.clientY-lastY)*.8;
+lastX=e.clientX;lastY=e.clientY;
+setView();
+});
+["pointerup","pointercancel"].forEach(ev=>$("stage").addEventListener(ev,()=>drag=false));
+
+function uuid(){
+return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{
+const r=Math.random()*16|0;
+return (c==="x"?r:(r&3|8)).toString(16);
+});
+}
+
+function safeName(s){
+return s.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"_").replace(/^[._-]+/,"")||"custom_block";
+}
+
+function getConfig(){
+const id=$("blockId").value.trim();
+if(!/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(id))throw Error("Usa el formato namespace:nombre para el identificador.");
+const parts=id.split(":");
+if(parts[1].includes("/")||parts[1].includes(".."))throw Error("El nombre del bloque no es válido.");
+return {
+id,namespace:parts[0],name:parts[1],
+texture:safeName($("texName").value||"edtra_custom_block"),
+category:$("category").value,
+destroy:Math.max(0,Number($("destroy").value)||0),
+explosion:Math.max(0,Number($("explosion").value)||0),
+light:Math.max(0,Math.min(15,Math.floor(Number($("light").value)||0))),
+render:$("render").value,
+sound:$("sound").value
+};
+}
+
+function makeGeometry(cfg){
+const faceUV={};
+for(const f of sides){
+const r={...regions[f]};fix(r);
+faceUV[f]={uv:[r.x,r.y],uv_size:[r.w,r.h]};
+}
+return {
+format_version:"1.16.0",
+"minecraft:geometry":[{
+description:{
+identifier:"geometry."+cfg.namespace+"."+cfg.name,
+texture_width:imgW,
+texture_height:imgH,
+visible_bounds_width:2,
+visible_bounds_height:2,
+visible_bounds_offset:[0,0.5,0]
+},
+bones:[{
+name:"root",
+pivot:[0,0,0],
+cubes:[{
+origin:[-8,0,-8],
+size:[16,16,16],
+uv:faceUV
+}]
+}]
+}]
+};
+}
+
+function makeBlock(cfg){
+const components={
+"minecraft:destroy_time":cfg.destroy,
+"minecraft:explosion_resistance":cfg.explosion,
+"minecraft:light_emission":cfg.light,
+"minecraft:geometry":"geometry."+cfg.namespace+"."+cfg.name,
+"minecraft:material_instances":{
+"*":{
+"texture":cfg.texture,
+"render_method":cfg.render
+}
+}
+};
+const description={identifier:cfg.id};
+if(cfg.category!=="none")description.menu_category={category:cfg.category};
+return {format_version:"1.21.0","minecraft:block":{description,components}};
+}
+
+function downloadBlob(blob,name){
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=name;
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+
+async function exportAddon(){
+const buttons=[$("exportAddon"),$("exportAddon2")];
+try{
+const cfg=getConfig();
+if(typeof JSZip==="undefined")throw Error("No se pudo cargar el generador ZIP. Comprueba tu conexión.");
+buttons.forEach(b=>b.disabled=true);
+$("status").textContent="Generando el addon...";
+const zip=new JSZip();
+const bp=zip.folder("Edtra_"+cfg.name+"_BP");
+const rp=zip.folder("Edtra_"+cfg.name+"_RP");
+const bpHeader=uuid(),rpHeader=uuid();
+
+bp.file("manifest.json",JSON.stringify({
+format_version:2,
+header:{name:"Edtra "+cfg.name+" BP",description:"Behavior Pack - Edtra Block Studio",uuid:bpHeader,version:[1,0,0],min_engine_version:[1,21,0]},
+modules:[{type:"data",uuid:uuid(),version:[1,0,0]}],
+dependencies:[{uuid:rpHeader,version:[1,0,0]}]
+},null,2));
+
+rp.file("manifest.json",JSON.stringify({
+format_version:2,
+header:{name:"Edtra "+cfg.name+" RP",description:"Resource Pack - Edtra Block Studio",uuid:rpHeader,version:[1,0,0],min_engine_version:[1,21,0]},
+modules:[{type:"resources",uuid:uuid(),version:[1,0,0]}]
+},null,2));
+
+bp.file("blocks/"+cfg.name+".json",JSON.stringify(makeBlock(cfg),null,2));
+rp.file("models/blocks/"+cfg.name+".geo.json",JSON.stringify(makeGeometry(cfg),null,2));
+
+const png=await new Promise((resolve,reject)=>{
+img.toBlob(b=>b?resolve(b):reject(Error("No se pudo generar la textura PNG.")),"image/png");
+});
+rp.file("textures/blocks/"+cfg.texture+".png",png);
+
+rp.file("textures/terrain_texture.json",JSON.stringify({
+resource_pack_name:"edtra_custom_blocks",
+texture_name:"atlas.terrain",
+padding:8,
+num_mip_levels:4,
+texture_data:{[cfg.texture]:{textures:"textures/blocks/"+cfg.texture}}
+},null,2));
+
+rp.file("blocks.json",JSON.stringify({
+[cfg.id]:{sound:cfg.sound,textures:cfg.texture}
+},null,2));
+
+rp.file("texts/languages.json",JSON.stringify(["es_ES","en_US"],null,2));
+rp.file("texts/es_ES.lang",`tile.${cfg.id}.name=${cfg.name}\n`);
+rp.file("texts/en_US.lang",`tile.${cfg.id}.name=${cfg.name}\n`);
+
+const blob=await zip.generateAsync({type:"blob",compression:"DEFLATE",compressionOptions:{level:6}});
+downloadBlob(blob,cfg.name+".mcaddon");
+$("status").textContent="Archivo descargado. Importa el addon y activa sus packs en tu mundo.";
+}catch(e){
+$("status").textContent="Error: "+e.message;
+}finally{
+buttons.forEach(b=>b.disabled=false);
+}
+}
+
+$("exportAddon").onclick=exportAddon;
+$("exportAddon2").onclick=exportAddon;
+
+$("reset").onclick=()=>{
+if(!confirm("¿Restablecer la configuración del bloque?"))return;
+$("blockId").value="edtra:custom_block";
+$("texName").value="edtra_custom_block";
+$("category").value="construction";
+$("destroy").value=3;$("explosion").value=6;$("light").value=0;
+$("render").value="opaque";$("sound").value="stone";$("file").value="";
+img=makeSample();imgW=16;imgH=16;selected="south";
+sides.forEach(f=>regions[f]={x:0,y:0,w:16,h:16});
+$("texInfo").textContent="Textura de muestra: 16 × 16 píxeles.";
+$("status").textContent="";
+angleX=-24;angleY=-35;setView();refresh();
+};
+
+window.addEventListener("resize",drawUV);
+refresh();
+</script>
+</body>
+</html>
