@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -75,9 +74,12 @@ main{grid-template-columns:1fr;padding:9px}
 <header>
 <div class="brand">
 <div class="logo">E</div>
-<div><h1>Edtra Block Studio</h1><div class="small">Minecraft Bedrock · Editor de bloques</div></div>
+<div><h1>Edtra Block Studio</h1><div class="small">Minecraft Bedrock 1.21.80+ · Editor de bloques</div></div>
 </div>
 <div class="actions">
+<button id="projectsButton">Proyectos</button>
+<button id="saveBlockButton">Guardar bloque</button>
+<button id="newBlockButton">+ Nuevo bloque</button>
 <button id="reset">Reiniciar</button>
 <button class="primary" id="exportAddon">Descargar .mcaddon</button>
 </div>
@@ -153,7 +155,7 @@ main{grid-template-columns:1fr;padding:9px}
 </div>
 <div class="divider"></div>
 <h2>5. Exportar addon</h2>
-<div class="note">Descarga un archivo .mcaddon con los packs de Minecraft Bedrock, la textura importada y la geometría personalizada con las regiones UV de las seis caras.</div>
+<div class="note">Descarga un .mcaddon para Minecraft Bedrock 1.21.80 o superior, con Behavior Pack, Resource Pack, geometría personalizada, textura y UV de las seis caras.</div>
 <div class="actions" style="margin-top:10px">
 <button class="primary" id="exportAddon2" style="width:100%">Descargar addon (.mcaddon)</button>
 </div>
@@ -381,7 +383,7 @@ return s.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"_").replace(/^[._-]+/,"")
 
 function getConfig(){
 const id=$("blockId").value.trim();
-if(!/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(id))throw Error("Usa el formato namespace:nombre para el identificador.");
+if(!/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(id))throw Error("Usa el formato namespace:nombre con letras minúsculas, números, guion o guion bajo.");
 const parts=id.split(":");
 if(parts[1].includes("/")||parts[1].includes(".."))throw Error("El nombre del bloque no es válido.");
 return {
@@ -427,21 +429,31 @@ uv:faceUV
 }
 
 function makeBlock(cfg){
-const components={
-"minecraft:destroy_time":cfg.destroy,
-"minecraft:explosion_resistance":cfg.explosion,
-"minecraft:light_emission":cfg.light,
-"minecraft:geometry":"geometry."+cfg.namespace+"."+cfg.name,
-"minecraft:material_instances":{
+const geometryId="geometry."+cfg.namespace+"."+cfg.name;
+const material={
 "*":{
 "texture":cfg.texture,
 "render_method":cfg.render
 }
+};
+const components={
+"minecraft:destructible_by_mining":{
+"seconds_to_destroy":cfg.destroy
+},
+"minecraft:destructible_by_explosion":{
+"explosion_resistance":cfg.explosion
+},
+"minecraft:light_emission":cfg.light,
+"minecraft:geometry":geometryId,
+"minecraft:material_instances":material,
+"minecraft:item_visual":{
+"geometry":geometryId,
+"material_instances":material
 }
 };
 const description={identifier:cfg.id};
 if(cfg.category!=="none")description.menu_category={category:cfg.category};
-return {format_version:"1.21.0","minecraft:block":{description,components}};
+return {format_version:"1.21.80","minecraft:block":{description,components}};
 }
 
 function downloadBlob(blob,name){
@@ -466,14 +478,14 @@ const bpHeader=uuid(),rpHeader=uuid();
 
 bp.file("manifest.json",JSON.stringify({
 format_version:2,
-header:{name:"Edtra "+cfg.name+" BP",description:"Behavior Pack - Edtra Block Studio",uuid:bpHeader,version:[1,0,0],min_engine_version:[1,21,0]},
+header:{name:"Edtra "+cfg.name+" BP",description:"Behavior Pack - Edtra Block Studio",uuid:bpHeader,version:[1,0,0],min_engine_version:[1,21,80]},
 modules:[{type:"data",uuid:uuid(),version:[1,0,0]}],
 dependencies:[{uuid:rpHeader,version:[1,0,0]}]
 },null,2));
 
 rp.file("manifest.json",JSON.stringify({
 format_version:2,
-header:{name:"Edtra "+cfg.name+" RP",description:"Resource Pack - Edtra Block Studio",uuid:rpHeader,version:[1,0,0],min_engine_version:[1,21,0]},
+header:{name:"Edtra "+cfg.name+" RP",description:"Resource Pack - Edtra Block Studio",uuid:rpHeader,version:[1,0,0],min_engine_version:[1,21,80]},
 modules:[{type:"resources",uuid:uuid(),version:[1,0,0]}]
 },null,2));
 
@@ -494,7 +506,8 @@ texture_data:{[cfg.texture]:{textures:"textures/blocks/"+cfg.texture}}
 },null,2));
 
 rp.file("blocks.json",JSON.stringify({
-[cfg.id]:{sound:cfg.sound,textures:cfg.texture}
+format_version:"1.19.30",
+[cfg.id]:{sound:cfg.sound}
 },null,2));
 
 rp.file("texts/languages.json",JSON.stringify(["es_ES","en_US"],null,2));
@@ -531,5 +544,643 @@ angleX=-24;angleY=-35;setView();refresh();
 window.addEventListener("resize",drawUV);
 refresh();
 </script>
+
+<style>
+#projectLayer{position:fixed;inset:0;z-index:100;background:#101319;overflow:auto;padding:18px;display:none}
+#projectLayer.show{display:block}
+.project-wrap{max-width:850px;margin:25px auto}
+.project-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.project-card{background:#1b2029;border:1px solid #343d4c;border-radius:12px;padding:14px;margin:9px 0}
+.project-card h3{margin:0 0 5px;font-size:15px}
+.project-card p{color:#a2afc0;font-size:12px}
+.project-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.project-actions button{font-size:12px}
+.project-empty{padding:35px 15px;text-align:center;border:1px dashed #465365;border-radius:12px;color:#a2afc0}
+#projectNameInput{max-width:420px}
+@media(max-width:720px){#projectLayer{padding:10px}.project-wrap{margin:12px auto}}
+</style>
+
+<div id="projectLayer" class="show">
+ <div class="project-wrap">
+  <div class="project-top">
+   <div><h1>Edtra Block Studio · Proyectos</h1><p class="small">Crea proyectos y guarda todos los bloques que quieras dentro de cada uno.</p></div>
+   <button id="closeProjects">Volver al editor</button>
+  </div>
+
+  <div class="panel">
+   <h2>Crear proyecto</h2>
+   <div class="actions">
+    <input id="projectNameInput" placeholder="Nombre del proyecto (ej. Mi addon)">
+    <button class="primary" id="createProjectButton">+ Crear proyecto</button>
+   </div>
+  </div>
+
+  <div class="divider"></div>
+  <h2>Mis proyectos</h2>
+  <div id="projectsList"></div>
+
+  <div class="divider"></div>
+  <div id="projectBlocksArea" style="display:none">
+   <div class="project-top">
+    <div><h2 id="activeProjectTitle">Proyecto</h2><p class="small" id="activeProjectInfo"></p></div>
+    <div class="actions">
+     <button id="addBlockFromProjects" class="primary">+ Crear bloque</button>
+     <button id="exportProjectButton">Exportar proyecto .MCPACK</button>
+    </div>
+   </div>
+   <div id="projectBlocksList"></div>
+  </div>
+
+  <p class="small" style="margin-top:20px">Los proyectos se guardan en este navegador mediante almacenamiento local del dispositivo.</p>
+ </div>
+</div>
+
+<script>
+(()=>{
+const layer=document.getElementById('projectLayer');
+const dbName='EdtraBlockStudioProjects';
+let db=null,projects=[],activeProjectId=null,activeBlockId=null;
+const byId=id=>document.getElementById(id);
+
+function openProjects(){
+ layer.classList.add('show');
+ renderProjects();
+}
+
+function closeProjects(){
+ if(!activeProjectId){
+  alert('Primero crea o abre un proyecto.');
+  return;
+ }
+ layer.classList.remove('show');
+}
+
+function openDB(){
+ return new Promise((resolve,reject)=>{
+  const req=indexedDB.open(dbName,1);
+  req.onupgradeneeded=()=>{
+   if(!req.result.objectStoreNames.contains('projects')){
+    req.result.createObjectStore('projects',{keyPath:'id'});
+   }
+  };
+  req.onsuccess=()=>{db=req.result;resolve(db)};
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+function allProjects(){
+ return new Promise((resolve,reject)=>{
+  const req=db.transaction('projects','readonly').objectStore('projects').getAll();
+  req.onsuccess=()=>resolve(req.result||[]);
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+function putProject(project){
+ return new Promise((resolve,reject)=>{
+  const req=db.transaction('projects','readwrite').objectStore('projects').put(project);
+  req.onsuccess=()=>resolve();
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+function deleteProject(id){
+ return new Promise((resolve,reject)=>{
+  const req=db.transaction('projects','readwrite').objectStore('projects').delete(id);
+  req.onsuccess=()=>resolve();
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+async function refreshProjects(){
+ projects=await allProjects();
+ renderProjects();
+}
+
+function renderProjects(){
+ const list=byId('projectsList');
+
+ if(!projects.length){
+  list.innerHTML='<div class="project-empty">Todavía no tienes proyectos.<br>Crea uno para comenzar.</div>';
+ }else{
+  list.innerHTML=projects.map(p=>`
+   <div class="project-card">
+    <h3>${esc(p.name)}</h3>
+    <p>${p.blocks.length} bloque(s) · Modificado: ${new Date(p.modified).toLocaleString()}</p>
+    <div class="project-actions">
+     <button data-open-project="${p.id}" class="primary">Abrir proyecto</button>
+     <button data-rename-project="${p.id}">Renombrar</button>
+     <button data-delete-project="${p.id}">Eliminar</button>
+    </div>
+   </div>
+  `).join('');
+ }
+
+ list.querySelectorAll('[data-open-project]').forEach(b=>{
+  b.onclick=()=>selectProject(b.dataset.openProject);
+ });
+
+ list.querySelectorAll('[data-rename-project]').forEach(b=>{
+  b.onclick=()=>renameProject(b.dataset.renameProject);
+ });
+
+ list.querySelectorAll('[data-delete-project]').forEach(b=>{
+  b.onclick=()=>removeProject(b.dataset.deleteProject);
+ });
+
+ if(activeProjectId){
+  const p=projects.find(x=>x.id===activeProjectId);
+  if(p)renderBlocks(p);
+  else{
+   activeProjectId=null;
+   byId('projectBlocksArea').style.display='none';
+  }
+ }
+}
+
+async function createProject(){
+ const name=byId('projectNameInput').value.trim();
+
+ if(!name){
+  alert('Escribe un nombre para el proyecto.');
+  return;
+ }
+
+ const p={
+  id:crypto.randomUUID(),
+  name,
+  blocks:[],
+  created:Date.now(),
+  modified:Date.now()
+ };
+
+ await putProject(p);
+ byId('projectNameInput').value='';
+ await refreshProjects();
+ await selectProject(p.id);
+}
+
+async function renameProject(id){
+ const p=projects.find(x=>x.id===id);
+ if(!p)return;
+
+ const name=prompt('Nuevo nombre del proyecto:',p.name);
+
+ if(name&&name.trim()){
+  p.name=name.trim();
+  p.modified=Date.now();
+  await putProject(p);
+  await refreshProjects();
+ }
+}
+
+async function removeProject(id){
+ const p=projects.find(x=>x.id===id);
+ if(!p)return;
+
+ if(!confirm('¿Eliminar el proyecto "'+p.name+'" y todos sus bloques?'))return;
+
+ await deleteProject(id);
+
+ if(activeProjectId===id)activeProjectId=null;
+
+ await refreshProjects();
+}
+
+async function selectProject(id){
+ activeProjectId=id;
+ activeBlockId=null;
+
+ const p=projects.find(x=>x.id===id);
+ if(!p)return;
+
+ renderBlocks(p);
+ layer.classList.remove('show');
+}
+
+function renderBlocks(p){
+ byId('projectBlocksArea').style.display='block';
+ byId('activeProjectTitle').textContent=p.name;
+ byId('activeProjectInfo').textContent=p.blocks.length+' bloque(s) guardado(s)';
+
+ const list=byId('projectBlocksList');
+
+ if(!p.blocks.length){
+  list.innerHTML='<div class="project-empty">Este proyecto todavía no tiene bloques.<br>Pulsa “Crear bloque” para añadir el primero.</div>';
+  return;
+ }
+
+ list.innerHTML=p.blocks.map(b=>`
+  <div class="project-card">
+   <h3>${esc(b.label||b.config.name)}</h3>
+   <p>${esc(b.config.id)}</p>
+   <div class="project-actions">
+    <button class="primary" data-load-block="${b.id}">Editar bloque</button>
+    <button data-duplicate-block="${b.id}">Duplicar</button>
+    <button data-delete-block="${b.id}">Eliminar</button>
+   </div>
+  </div>
+ `).join('');
+
+ list.querySelectorAll('[data-load-block]').forEach(b=>{
+  b.onclick=()=>loadBlock(b.dataset.loadBlock);
+ });
+
+ list.querySelectorAll('[data-duplicate-block]').forEach(b=>{
+  b.onclick=()=>duplicateBlock(b.dataset.duplicateBlock);
+ });
+
+ list.querySelectorAll('[data-delete-block]').forEach(b=>{
+  b.onclick=()=>removeBlock(b.dataset.deleteBlock);
+ });
+}
+
+function captureBlock(){
+ const config=getConfig();
+
+ return {
+  config,
+  image:img.toDataURL('image/png'),
+  imgW,
+  imgH,
+  regions:JSON.parse(JSON.stringify(regions)),
+  label:config.name
+ };
+}
+
+async function saveCurrentBlock(){
+ if(!activeProjectId){
+  openProjects();
+  alert('Crea o abre un proyecto primero.');
+  return;
+ }
+
+ let p=projects.find(x=>x.id===activeProjectId);
+ if(!p)return;
+
+ let data;
+
+ try{
+  data=captureBlock();
+ }catch(e){
+  alert(e.message);
+  return;
+ }
+
+ if(activeBlockId){
+  const old=p.blocks.find(b=>b.id===activeBlockId);
+  if(old){
+   Object.assign(old,data);
+   old.modified=Date.now();
+  }
+ }else{
+  data.id=crypto.randomUUID();
+  data.created=Date.now();
+  data.modified=Date.now();
+  p.blocks.push(data);
+  activeBlockId=data.id;
+ }
+
+ p.modified=Date.now();
+
+ await putProject(p);
+ await refreshProjects();
+
+ byId('status').textContent='Bloque guardado en el proyecto "'+p.name+'".';
+}
+
+function newBlock(){
+ activeBlockId=null;
+
+ $("blockId").value="edtra:custom_block";
+ $("texName").value="edtra_custom_block";
+ $("category").value="construction";
+ $("destroy").value=3;
+ $("explosion").value=6;
+ $("light").value=0;
+ $("render").value="opaque";
+ $("sound").value="stone";
+ $("file").value="";
+
+ img=makeSample();
+ imgW=16;
+ imgH=16;
+ selected="south";
+
+ sides.forEach(f=>regions[f]={x:0,y:0,w:16,h:16});
+
+ $("texInfo").textContent="Textura de muestra: 16 × 16 píxeles.";
+ $("status").textContent="Bloque nuevo. Configúralo y pulsa Guardar bloque.";
+
+ angleX=-24;
+ angleY=-35;
+ setView();
+ refresh();
+
+ layer.classList.remove('show');
+}
+
+async function loadBlock(id){
+ const p=projects.find(x=>x.id===activeProjectId);
+ const b=p?.blocks.find(x=>x.id===id);
+ if(!b)return;
+
+ activeBlockId=id;
+
+ const c=b.config;
+
+ byId('blockId').value=c.id;
+ byId('texName').value=c.texture;
+ byId('category').value=c.category;
+ byId('destroy').value=c.destroy;
+ byId('explosion').value=c.explosion;
+ byId('light').value=c.light;
+ byId('sound').value=c.sound;
+ byId('render').value=c.render;
+
+ const im=new Image();
+
+ im.onload=()=>{
+  const canvas=document.createElement('canvas');
+  canvas.width=b.imgW;
+  canvas.height=b.imgH;
+  canvas.getContext('2d').drawImage(im,0,0);
+
+  img=canvas;
+  imgW=b.imgW;
+  imgH=b.imgH;
+
+  sides.forEach(f=>regions[f]={...b.regions[f]});
+
+  byId('texInfo').textContent='Textura: '+imgW+' × '+imgH+' píxeles';
+
+  refresh();
+
+  byId('status').textContent='Editando: '+b.label;
+
+  layer.classList.remove('show');
+ };
+
+ im.onerror=()=>alert('No se pudo cargar la textura guardada.');
+ im.src=b.image;
+}
+
+async function duplicateBlock(id){
+ const p=projects.find(x=>x.id===activeProjectId);
+ const b=p?.blocks.find(x=>x.id===id);
+ if(!b)return;
+
+ const copy=JSON.parse(JSON.stringify(b));
+
+ copy.id=crypto.randomUUID();
+ copy.label=b.label+'_copia';
+ copy.config.name=b.config.name+'_copia';
+ copy.config.id=b.config.namespace+':'+copy.config.name;
+ copy.created=Date.now();
+ copy.modified=Date.now();
+
+ p.blocks.push(copy);
+ p.modified=Date.now();
+
+ await putProject(p);
+ await refreshProjects();
+}
+
+async function removeBlock(id){
+ const p=projects.find(x=>x.id===activeProjectId);
+ if(!p)return;
+
+ if(!confirm('¿Eliminar este bloque del proyecto?'))return;
+
+ p.blocks=p.blocks.filter(b=>b.id!==id);
+
+ if(activeBlockId===id)activeBlockId=null;
+
+ p.modified=Date.now();
+
+ await putProject(p);
+ await refreshProjects();
+}
+
+async function exportProject(){
+ const p=projects.find(x=>x.id===activeProjectId);
+ if(!p)return;
+
+ if(!p.blocks.length){
+  alert('Este proyecto no tiene bloques para exportar.');
+  return;
+ }
+
+ if(typeof JSZip==='undefined'){
+  alert('No se pudo cargar JSZip. Comprueba tu conexión.');
+  return;
+ }
+
+ try{
+  const zip=new JSZip();
+  const slug=p.name.toLowerCase().replace(/[^a-z0-9_-]/g,'_')||'project';
+
+  const bp=zip.folder(slug+'_BP');
+  const rp=zip.folder(slug+'_RP');
+
+  const bpHeader=crypto.randomUUID();
+  const rpHeader=crypto.randomUUID();
+
+  bp.file('manifest.json',JSON.stringify({
+   format_version:2,
+   header:{
+    name:p.name+' BP',
+    description:'Behavior Pack - Edtra Block Studio',
+    uuid:bpHeader,
+    version:[1,0,0],
+    min_engine_version:[1,21,80]
+   },
+   modules:[{
+    type:'data',
+    uuid:crypto.randomUUID(),
+    version:[1,0,0]
+   }],
+   dependencies:[{
+    uuid:rpHeader,
+    version:[1,0,0]
+   }]
+  },null,2));
+
+  rp.file('manifest.json',JSON.stringify({
+   format_version:2,
+   header:{
+    name:p.name+' RP',
+    description:'Resource Pack - Edtra Block Studio',
+    uuid:rpHeader,
+    version:[1,0,0],
+    min_engine_version:[1,21,80]
+   },
+   modules:[{
+    type:'resources',
+    uuid:crypto.randomUUID(),
+    version:[1,0,0]
+   }]
+  },null,2));
+
+  const terrain={};
+  const blockSounds={};
+  const langES=[];
+  const langEN=[];
+
+  for(const b of p.blocks){
+   const c=b.config;
+
+   if(p.blocks.some(other=>other.id!==b.id&&other.config.id===c.id)){
+    throw Error('Hay bloques con identificadores repetidos: '+c.id);
+   }
+
+   bp.file('blocks/'+c.name+'.json',JSON.stringify(makeBlock(c),null,2));
+
+   const geometry=makeGeometryFromSaved(b);
+
+   rp.file('models/blocks/'+c.name+'.geo.json',JSON.stringify(geometry,null,2));
+
+   const textureCanvas=document.createElement('canvas');
+   textureCanvas.width=b.imgW;
+   textureCanvas.height=b.imgH;
+
+   const textureImage=new Image();
+
+   await new Promise((resolve,reject)=>{
+    textureImage.onload=resolve;
+    textureImage.onerror=reject;
+    textureImage.src=b.image;
+   });
+
+   textureCanvas.getContext('2d').drawImage(textureImage,0,0);
+
+   const png=await new Promise((resolve,reject)=>{
+    textureCanvas.toBlob(
+     v=>v?resolve(v):reject(Error('No se pudo preparar una textura.')),
+     'image/png'
+    );
+   });
+
+   rp.file('textures/blocks/'+c.texture+'.png',png);
+
+   terrain[c.texture]={
+    textures:'textures/blocks/'+c.texture
+   };
+
+   blockSounds[c.id]={sound:c.sound};
+
+   langES.push('tile.'+c.id+'.name='+c.name);
+   langEN.push('tile.'+c.id+'.name='+c.name);
+  }
+
+  rp.file('textures/terrain_texture.json',JSON.stringify({
+   resource_pack_name:slug,
+   texture_name:'atlas.terrain',
+   padding:8,
+   num_mip_levels:4,
+   texture_data:terrain
+  },null,2));
+
+  rp.file('blocks.json',JSON.stringify({
+   format_version:'1.19.30',
+   ...blockSounds
+  },null,2));
+
+  rp.file('texts/languages.json',JSON.stringify(['es_ES','en_US'],null,2));
+
+  rp.file('texts/es_ES.lang',langES.join('\n')+'\n');
+  rp.file('texts/en_US.lang',langEN.join('\n')+'\n');
+
+  const blob=await zip.generateAsync({
+   type:'blob',
+   compression:'DEFLATE',
+   compressionOptions:{level:6}
+  });
+
+  downloadBlob(blob,slug+'.mcaddon');
+
+  alert('Proyecto exportado con '+p.blocks.length+' bloque(s).');
+
+ }catch(e){
+  alert('Error al exportar: '+(e.message||e));
+ }
+}
+
+function makeGeometryFromSaved(b){
+ const faceUV={};
+
+ for(const f of sides){
+  const r={...b.regions[f]};
+  faceUV[f]={
+   uv:[r.x,r.y],
+   uv_size:[r.w,r.h]
+  };
+ }
+
+ return {
+  format_version:'1.16.0',
+  'minecraft:geometry':[{
+   description:{
+    identifier:'geometry.'+b.config.namespace+'.'+b.config.name,
+    texture_width:b.imgW,
+    texture_height:b.imgH,
+    visible_bounds_width:2,
+    visible_bounds_height:2,
+    visible_bounds_offset:[0,.5,0]
+   },
+   bones:[{
+    name:'root',
+    pivot:[0,0,0],
+    cubes:[{
+     origin:[-8,0,-8],
+     size:[16,16,16],
+     uv:faceUV
+    }]
+   }]
+  }]
+ };
+}
+
+byId('projectsButton').onclick=openProjects;
+byId('closeProjects').onclick=closeProjects;
+byId('createProjectButton').onclick=createProject;
+byId('saveBlockButton').onclick=saveCurrentBlock;
+byId('newBlockButton').onclick=newBlock;
+byId('addBlockFromProjects').onclick=newBlock;
+byId('exportProjectButton').onclick=exportProject;
+
+byId('exportAddon').onclick=()=>{
+ if(activeProjectId)exportProject();
+ else openProjects();
+};
+
+byId('exportAddon2').onclick=()=>{
+ if(activeProjectId)exportProject();
+ else openProjects();
+};
+
+(async()=>{
+ try{
+  await openDB();
+  await refreshProjects();
+  openProjects();
+ }catch(e){
+  alert('No se pudo iniciar el almacenamiento de proyectos: '+e.message);
+ }
+})();
+
+})();
+</script>
+
 </body>
 </html>
